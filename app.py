@@ -82,13 +82,18 @@ def show_score(window, size, choice, color, font, fontsize, score, score_growth=
     window.blit(score_surface, score_rect)
 
 def show_stopwatch(window, size, color, font, fontsize, time):
-    msg = ''
+    msg = f'Survive : {convert_seconds_to_min_sec(time)}'
     time_font = pygame.font.SysFont(font, fontsize)
     time_surface = time_font.render(msg, True, color)
     time_rect = time_surface.get_rect()
-    time_rect.midtop = (size[0]/8, 12)
+    time_rect.midtop = (size[0]/8, 15)
 
     window.blit(time_surface, time_rect)
+
+def convert_seconds_to_min_sec(seconds):
+    mins = seconds // 60
+    secs = seconds % 60
+    return f"{mins}:{secs:02d}"
 
 # Game Over
 def game_over(window, size, score):
@@ -142,10 +147,12 @@ class StopWatch(object):
         self.interval = interval
         self.score_callback = score_callback
         self.is_running = False
+        self.count_seconds = 0
         self.start()
 
     def _run_function(self):
         self.is_running = False
+        self.count_seconds += 1
         self.start()
         self.score_callback()
 
@@ -254,6 +261,8 @@ def start_game():
         # 점수를 띄워줍니다.
         score_growth = len(snake_body) - 2
         show_score(main_window, frame, 1, white, 'consolas', 20, score, score_growth)
+
+        show_stopwatch(main_window, frame, white, 'consolas', 20, rt.count_seconds)
 
         # 실제 화면에 보이도록 업데이트 해줍니다.
         pygame.display.update()
