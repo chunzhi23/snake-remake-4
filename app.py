@@ -13,7 +13,7 @@ import pygame
 import random
 import time
 from threading import Timer
-import InputManager
+from InputManager import InputManager
 
 # 1-1. 게임 사전 설정(Settings on the game)
 
