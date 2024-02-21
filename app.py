@@ -13,6 +13,8 @@ import pygame
 import random
 import time
 from threading import Timer
+from InputManager import InputManager
+from items.Item import Item
 
 # 1-1. 게임 사전 설정(Settings on the game)
 
@@ -29,14 +31,23 @@ red = pygame.Color(255, 0, 0)
 green = pygame.Color(0, 255, 0)
 blue = pygame.Color(0, 0, 255)
 
+pygame.init()
+backgroundsound = pygame.mixer.Sound( "sound/backgroundmusic.mp3" )
+backgroundsound.play(-1)
+
 # 시간을 흐르게 하기 위한 FPS counter
 fps_controller = pygame.time.Clock()
 
+# 입력을 관리하는 InputManager
+inputManager = InputManager(pygame)
+
+items = []
 # 1-2. Pygame 초기화(Initialize Pygame)
 
 def Init(size):
     # 초기화 후 error가 일어났는지 알아봅니다.
     check_errors = pygame.init()
+    inputManager.init()
 
     # pygame.init() example output -> (6, 0)
     # 두번째 항목이 error의 수를 알려줍니다.
@@ -50,6 +61,9 @@ def Init(size):
     # pygame.display를 통해 제목, window size를 설정하고 초기화합니다.
     pygame.display.set_caption('Snake Example with PyGame')
     game_window = pygame.display.set_mode(size)
+    global items
+    # 아이템 리스트 초기화
+    items = []
     return game_window
 
 # ##### 1-3. 기본 logic 함수 모음(basic logics of the game)
@@ -73,7 +87,8 @@ def show_score(window, size, choice, color, font, fontsize, score, score_growth=
     # Game over 상황인지 게임중 상황인지에 따라 다른 위치를 선정합니다.
     # Select different location depending on the situation.
     if choice == 1:
-        score_rect.midtop = (size[0]/8, 15)
+        margin_left = 10 
+        score_rect.topleft = (margin_left, 15)
     else:
         score_rect.midtop = (size[0]/2, size[1]/1.25)
 
@@ -86,8 +101,10 @@ def show_stopwatch(window, size, color, font, fontsize, time):
     time_font = pygame.font.SysFont(font, fontsize)
     time_surface = time_font.render(msg, True, color)
     time_rect = time_surface.get_rect()
-    time_rect.midtop = (size[0]/8, 15)
-
+    
+    margin_right = 10
+    time_rect.topright = (size[0] - margin_right, 15)
+    
     window.blit(time_surface, time_rect)
 
 def convert_seconds_to_min_sec(seconds):
@@ -120,25 +137,10 @@ def game_over(window, size, score):
     # 3초 기다린 후 게임을 종료합니다.
     # exit program after 3 seconds.
     time.sleep(3)
-    start_game() # 임시
-
-# Keyboard input
-def get_keyboard(key, cur_dir):
-    # WASD, 방향키를 입력 받으면 해당 방향으로 이동합니다.
-    # 방향이 반대방향이면 무시합니다.
-    # Chnage direction using WASD or arrow key
-    # Ignore keyboard input if input key has opposite direction
-    if cur_dir != 'DOWN' and key == pygame.K_UP or key == ord('w'):
-        return 'UP'
-    if cur_dir != 'UP' and key == pygame.K_DOWN or key == ord('s'):
-        return 'DOWN'
-    if cur_dir != 'RIGHT' and key == pygame.K_LEFT or key == ord('a'):
-        return 'LEFT'
-    if cur_dir != 'LEFT' and key == pygame.K_RIGHT or key == ord('d'):
-        return 'RIGHT'
-    # 모두 해당하지 않다면 원래 방향을 돌려줍니다.
-    # Return current direction if none of keyboard input occured
-    return cur_dir
+    #start_game() # 임시
+    # 게임종료 ( 재시작 방지 )
+    pygame.quit()
+    sys.exit()
 
 # 스톱워치
 class StopWatch(object):
@@ -172,32 +174,72 @@ class StopWatch(object):
 
 # 초기화
 def start_game():
+    global fps
+
     def update_score():
         nonlocal score
+        nonlocal bg
+        sound = pygame.mixer.Sound( "sound/stageclear.wav" )
         score += len(snake_body) - 2
+        if score <= 10:
+            bg = pygame.image.load('img/background1.png')
+        elif score > 10 and score < 30:
+            bg = pygame.image.load('img/background2.png')
+            sound.play()
+            pygame.mixer.music.stop()
+        elif score >= 30 and score <= 60:
+            bg = pygame.image.load('img/background3.jpeg')
+            sound.play()
+            pygame.mixer.music.stop()
+        else:
+            bg = pygame.image.load('img/background4.jpeg')
+        
+
         # print("Score updated to:", score)
+    
+    def gen_item():
+        rand = random.randint(1, 100)
+        code = 0
+        if rand <= 50:
+            code = 2
+        elif rand <= 65:
+            code = 1
+        elif rand <= 70:
+            code = 3
+        elif rand <= 75:
+            code = 4
+        elif rand <= 80:
+            code = 5
+        else:
+            code = 6
+        items.append(Item(frame, code))
+        print("생성됨")
+        # 아이템 새로 생성하는 코드
 
     # Game 관련 변수들
     snake_pos = [100, 50]
     snake_body = [[100, 50], [100-10, 50], [100-(2*10), 50]]
-
     food_pos = [random.randrange(1, (frame[0]//10)) * 10,
                 random.randrange(1, (frame[1]//10)) * 10]
     food_spawn = True
 
-    direction = 'RIGHT'
-
+    direction = inputManager.get_default_direction()
     score = 0
 
     main_window = Init(frame)
 
     rt = StopWatch(1, update_score)
+    bg = pygame.image.load('img/background1.png')
+
+    itemGenTimer = StopWatch(5, gen_item)
 
     while True:
         # 게임에서 event를 받아옵니다.
         for event in pygame.event.get():
             # 종료시 실제로 프로그램을 종료합니다.
             if event.type == pygame.QUIT:
+                rt.stop()
+                itemGenTimer.stop()
                 pygame.quit()
                 return
             elif event.type == pygame.KEYDOWN:
@@ -206,7 +248,7 @@ def start_game():
                     pygame.event.post(pygame.event.Event(pygame.QUIT))
                 else:
                     # 입력 키로 방향을 얻어냅니다.
-                    direction = get_keyboard(event.key, direction)
+                    direction = inputManager.get_keyboard(event.key, direction)
 
         # 실제로 뱀의 위치를 옮깁니다.
         if direction == 'UP':
@@ -233,8 +275,15 @@ def start_game():
             ]
         food_spawn = True
 
-        # 우선 게임을 검은 색으로 채우고 뱀의 각 위치마다 그림을 그립니다.
-        main_window.fill(black)
+
+        #main_window.blit(bg, (0, 0))
+        bgsc = pygame.transform.scale(bg, (720,480))
+        main_window.blit(bgsc, (0, 0))
+
+        dark = pygame.Surface(frame, flags=pygame.SRCALPHA)
+        dark.fill((150, 150, 150, 0))
+        main_window.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
+
         for pos in snake_body:
             pygame.draw.rect(main_window, green,
                             pygame.Rect(pos[0], pos[1], 10, 10))
@@ -243,19 +292,58 @@ def start_game():
         pygame.draw.rect(main_window, white,
                         pygame.Rect(food_pos[0], food_pos[1], 10, 10))
 
+        for item in items:
+            if item.type == 2:
+                item.update_timer(main_window)
+                if item.TimeOver: 
+                    rt.stop()
+                    itemGenTimer.stop()
+                    game_over(main_window, frame, score)
+                    
+            item.draw(main_window)
+            if item.position[0] == snake_pos[0] and item.position[1] == snake_pos[1]:
+                if item.type == 1:
+                    inputManager.on_reverse()
+                    snake_body.insert(1, list(snake_body[-1]))
+                if item.type == 2:
+                    items.remove(item)
+                    snake_body.insert(1, list(snake_body[-1]))
+                    continue # 먹으면 제거만?
+                if item.type == 3:
+                    fps += 10
+                    snake_body.insert(1, list(snake_body[-1]))
+                if item.type == 4:
+                    if fps > 10:
+                        fps -= 5
+                    snake_body.insert(1, list(snake_body[-1]))
+                if item.type == 5:
+                    print("함정카드")
+                    rt.stop()
+                    itemGenTimer.stop()
+                    game_over(main_window, frame, score)
+                if item.type == 6:
+                    snake_body.insert(1, list(snake_body[-1]))
+                #아이템 먹음
+                #item.
+                items.remove(item)
+        
         # Game Over 상태를 확인합니다.
         # 바깥 벽 처리를 합니다.
         if snake_pos[0] < 0 or snake_pos[0] > frame[0] - 10:
             rt.stop()
+            itemGenTimer.stop()
+
             game_over(main_window, frame, score)
         if snake_pos[1] < 0 or snake_pos[1] > frame[1] - 10:
             rt.stop()
+            itemGenTimer.stop()
             game_over(main_window, frame, score)
 
         # 뱀의 몸에 닿았는지 확인합니다.
         for block in snake_body[1:]:
             if snake_pos[0] == block[0] and snake_pos[1] == block[1]:
                 rt.stop()
+                itemGenTimer.stop()
                 game_over(main_window, frame, score)
 
         # 점수를 띄워줍니다.
