@@ -41,14 +41,15 @@ class Item:
             self.TimeOver = True
 
         # 폰트 설정
-        font = pygame.font.Font(None, 20)  
+        font_path = "font/DS-DIGIB.ttf"
+        font = pygame.font.Font(font_path, 20)  
         # 텍스트 생성
         if elapsed_time >= 9000: #남은 시간 6초 이하면 빨간색으로 표시
             text = font.render(str((15000 - elapsed_time)/1000) , True, Color.red)
         else: text = font.render(str((15000 - elapsed_time)/1000) , True, Color.white)
         # 텍스트의 위치 설정
         text_rect = text.get_rect()
-        text_rect.topleft = (self.position[0]-15, self.position[1]-20)
+        text_rect.midbottom = (self.position[0]+5, self.position[1]-5)
         window.blit(text, text_rect)
     
     def draw(self, window):
