@@ -276,36 +276,50 @@ def start_game():
 
 
 def start_screen():
-    running = True
-
-    while running:
+    while True:
         main_window.fill(white)
-        FONT_TITLE = pygame.font.SysFont('Pretendard', 48)
+
+        LOGO = pygame.image.load("img/logo.png")
         FONT_BUTTON = pygame.font.SysFont('Pretendard', 28)
 
-        draw_text("폭탄제거로봇", FONT_TITLE, black, frame[0] / 2, frame[1] / 4)
-        draw_button("게임 시작", FONT_BUTTON, green, frame[0] / 2 - 70, frame[1] / 2, 140, 60)
+        ico_airplane = pygame.image.load("img/ico_airplane.png")
+        resized_ico_airplane = pygame.transform.scale(ico_airplane, (200, 200))
+        rotated_ico_airplane = pygame.transform.rotate(resized_ico_airplane, 30)
+        ico_bomb = pygame.image.load("img/ico_bomb.png")
+        resized_ico_bomb = pygame.transform.scale(ico_bomb, (100, 100))
+        rotated_ico_bomb = pygame.transform.rotate(resized_ico_bomb, -30)
+
+        draw_image(LOGO, frame[0] / 2, frame[1] / 10)
+        draw_image(rotated_ico_airplane, frame[0] / 5, frame[1] / 2.2)
+        draw_image(rotated_ico_bomb, frame[0] / 1.2, frame[1] / 2.5)
+        draw_button("게임 시작", FONT_BUTTON, green, frame[0] / 2 - 70, frame[1] / 1.8, 140, 60)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                pygame.quit()
+                sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 button_rect = pygame.Rect(frame[0] / 2 - 70, frame[1] / 2, 140, 60)
                 if button_rect.collidepoint(mouse_pos):
-                    running = False  # Exit the start screen and start the game
                     start_game()
 
         pygame.display.flip()
-
-    pygame.quit()
-    sys.exit()
 
 def draw_text(text, font, color, x, y):
     text_surface = font.render(text, True, color)
     text_rect = text_surface.get_rect()
     text_rect.center = (x, y)
     main_window.blit(text_surface, text_rect)
+
+def draw_image(image, x, y):
+    # Calculate the position to center the image at the top
+    image_rect = image.get_rect()
+    x_pos = x - image_rect.width / 2
+    y_pos = y
+
+    # Draw the image
+    main_window.blit(image, (x_pos, y_pos))
 
 def draw_button(text, font, color, x, y, width, height):
     # Draw shadow
