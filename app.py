@@ -175,13 +175,18 @@ def start_game():
     def update_score():
         nonlocal score
         nonlocal bg
+        sound = pygame.mixer.Sound( "sound/stageclear.wav" )
         score += len(snake_body) - 2
-        if score <= 100:
+        if score <= 10:
             bg = pygame.image.load('img/background1.png')
-        elif score > 100 and score < 300:
+        elif score > 10 and score < 30:
             bg = pygame.image.load('img/background2.png')
-        elif score >= 300 and score <= 600:
+            sound.play()
+            pygame.mixer.music.stop()
+        elif score >= 30 and score <= 60:
             bg = pygame.image.load('img/background3.jpeg')
+            sound.play()
+            pygame.mixer.music.stop()
         else:
             bg = pygame.image.load('img/background4.jpeg')
         
