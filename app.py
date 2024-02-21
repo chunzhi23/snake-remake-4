@@ -180,18 +180,16 @@ def start_game():
     # Game 관련 변수들
     snake_pos = [100, 50]
     snake_body = [[100, 50], [100-10, 50], [100-(2*10), 50]]
-
     food_pos = [random.randrange(1, (frame[0]//10)) * 10,
                 random.randrange(1, (frame[1]//10)) * 10]
     food_spawn = True
-
     direction = 'RIGHT'
-
     score = 0
 
     main_window = Init(frame)
 
     rt = StopWatch(1, update_score)
+    bg = pygame.image.load('img/background1.png')
 
     while True:
         # 게임에서 event를 받아옵니다.
@@ -233,8 +231,13 @@ def start_game():
             ]
         food_spawn = True
 
-        # 우선 게임을 검은 색으로 채우고 뱀의 각 위치마다 그림을 그립니다.
-        main_window.fill(black)
+
+        main_window.blit(bg, (0, 0))
+
+        dark = pygame.Surface(frame, flags=pygame.SRCALPHA)
+        dark.fill((150, 150, 150, 0))
+        main_window.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
+
         for pos in snake_body:
             pygame.draw.rect(main_window, green,
                             pygame.Rect(pos[0], pos[1], 10, 10))
