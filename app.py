@@ -232,15 +232,19 @@ def start_game():
         # 바깥 벽 처리를 합니다.
         if snake_pos[0] < 0 or snake_pos[0] > frame[0] - 10:
             rt.stop()
+            itemGenTimer.stop()
+
             game_over(main_window, frame, score)
         if snake_pos[1] < 0 or snake_pos[1] > frame[1] - 10:
             rt.stop()
+            itemGenTimer.stop()
             game_over(main_window, frame, score)
 
         # 뱀의 몸에 닿았는지 확인합니다.
         for block in snake_body[1:]:
             if snake_pos[0] == block[0] and snake_pos[1] == block[1]:
                 rt.stop()
+                itemGenTimer.stop()
                 game_over(main_window, frame, score)
 
         # 점수를 띄워줍니다.
