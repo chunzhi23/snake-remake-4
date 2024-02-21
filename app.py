@@ -44,6 +44,7 @@ items = []
 def Init(size):
     # 초기화 후 error가 일어났는지 알아봅니다.
     check_errors = pygame.init()
+    inputManager.init()
 
     # pygame.init() example output -> (6, 0)
     # 두번째 항목이 error의 수를 알려줍니다.
