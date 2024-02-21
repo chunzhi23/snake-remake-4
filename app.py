@@ -162,8 +162,21 @@ def start_game():
         # print("Score updated to:", score)
     
     def gen_item():
-        rand = random.randint(1, 6)
-        items.append(Item(frame, rand))
+        rand = random.randint(1, 100)
+        code = 0
+        if rand <= 50:
+            code = 2
+        elif rand <= 65:
+            code = 1
+        elif rand <= 70:
+            code = 3
+        elif rand <= 75:
+            code = 4
+        elif rand <= 80:
+            code = 5
+        else:
+            code = 6
+        items.append(Item(frame, code))
         print("생성됨")
         # 아이템 새로 생성하는 코드
 
