@@ -1,12 +1,13 @@
 class InputManager:
     def __init__(self, pygame):
-        self.direction = "RIGHT"
         self.pygame = pygame
         self.reverse = False
 
     def init(self):
-        self.direction = "RIGHT"
         self.reverse = False
+
+    def get_default_direction():
+        return "RIGHT"
 
     def on_reverse(self):
         if self.reverse:
@@ -21,36 +22,26 @@ class InputManager:
         # Chnage direction using WASD or arrow key
         # Ignore keyboard input if input key has opposite direction
         if not self.reverse:
-            if cur_dir != 'DOWN' and key == self.pygame.K_UP or key == ord('w'):
-                self.direction = "UP"
+            if (cur_dir != 'DOWN') and (key == self.pygame.K_UP or key == ord('w')):
                 return 'UP'
-            if cur_dir != 'UP' and key == self.pygame.K_DOWN or key == ord('s'):
-                self.direction = "DOWN"
+            if (cur_dir != 'UP') and (key == self.pygame.K_DOWN or key == ord('s')):
                 return 'DOWN'
-            if cur_dir != 'RIGHT' and key == self.pygame.K_LEFT or key == ord('a'):
-                self.direction = "LEFT"
+            if (cur_dir != 'RIGHT') and (key == self.pygame.K_LEFT or key == ord('a')):
                 return 'LEFT'
-            if cur_dir != 'LEFT' and key == self.pygame.K_RIGHT or key == ord('d'):
-                self.direction = "RIGHT"
+            if (cur_dir != 'LEFT') and (key == self.pygame.K_RIGHT or key == ord('d')):
                 return 'RIGHT'
             # 모두 해당하지 않다면 원래 방향을 돌려줍니다.
             # Return current direction if none of keyboard input occured
-            self.direction = cur_dir
             return cur_dir
         else:
-            if cur_dir != 'UP' and (key == self.pygame.K_UP or key == ord('w')):
-                self.direction = "DOWN"
+            if (cur_dir != 'UP') and (key == self.pygame.K_UP or key == ord('w')):
                 return 'DOWN'
-            if cur_dir != 'DOWN' and (key == self.pygame.K_DOWN or key == ord('s')):
-                self.direction = "UP"
+            if (cur_dir != 'DOWN') and (key == self.pygame.K_DOWN or key == ord('s')):
                 return 'UP'
-            if cur_dir != 'LEFT' and (key == self.pygame.K_LEFT or key == ord('a')):
-                self.direction = "RIGHT"
+            if (cur_dir != 'LEFT') and (key == self.pygame.K_LEFT or key == ord('a')):
                 return 'RIGHT'
-            if cur_dir != 'RIGHT' and (key == self.pygame.K_RIGHT or key == ord('d')):
-                self.direction = "LEFT"
+            if (cur_dir != 'RIGHT') and (key == self.pygame.K_RIGHT or key == ord('d')):
                 return 'LEFT'
             # 모두 해당하지 않다면 원래 방향을 돌려줍니다.
             # Return current direction if none of keyboard input occured
-            self.direction = cur_dir
             return cur_dir

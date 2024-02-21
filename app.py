@@ -191,7 +191,7 @@ def start_game():
                 random.randrange(1, (frame[1]//10)) * 10]
     food_spawn = True
 
-    direction = 'RIGHT'
+    direction = inputManager.getDefaultDirection()
 
     score = 0
 
