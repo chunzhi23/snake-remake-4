@@ -282,14 +282,18 @@ def start_game():
             if item.position[0] == snake_pos[0] and item.position[1] == snake_pos[1]:
                 if item.type == 1:
                     inputManager.on_reverse()
+                    snake_body.insert(1, list(snake_body[-1]))
                 if item.type == 2:
                     items.remove(item)
+                    snake_body.insert(1, list(snake_body[-1]))
                     continue # 먹으면 제거만?
                 if item.type == 3:
                     fps += 10
+                    snake_body.insert(1, list(snake_body[-1]))
                 if item.type == 4:
                     if fps > 10:
                         fps -= 5
+                    snake_body.insert(1, list(snake_body[-1]))
                 if item.type == 5:
                     print("함정카드")
                     rt.stop()
