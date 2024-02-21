@@ -120,10 +120,48 @@ def game_over(window, size, score):
     # Show drawn windows to screen
     pygame.display.flip()
 
-    # 3초 기다린 후 게임을 종료합니다.
-    # exit program after 3 seconds.
-    time.sleep(3)
+    # Button settings
+    button_width = 150
+    button_height = 50
+    button_margin = 20
     
+    # Button text and font settings
+    button_texts = ["돌아가기", "다시 시작", "게임 종료"]
+    FONT_BUTTON = pygame.font.SysFont('Pretendard', 28)
+
+    # Calculate starting position for buttons
+    total_button_width = button_width * 3 + button_margin * 2
+    start_x = (frame[0] - total_button_width) // 2
+    start_y = (frame[1] - button_height) // 2 + 50
+
+    for i, text in enumerate(button_texts):
+        button_x = start_x + (button_width + button_margin) * i
+        draw_button(text, FONT_BUTTON, (red, green, blue)[i], button_x, start_y, button_width, button_height)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                # Define rectangles for each button
+                goback_button_rect = pygame.Rect(start_x, start_y, button_width, button_height)
+                restart_button_rect = pygame.Rect(start_x + button_width + button_margin, start_y, button_width, button_height)
+                finish_button_rect = pygame.Rect(start_x + 2 * (button_width + button_margin), start_y, button_width, button_height)
+                # Check if the mouse collides with any button
+                if goback_button_rect.collidepoint(mouse_pos):
+                    start_screen()
+                    return
+                elif restart_button_rect.collidepoint(mouse_pos):
+                    start_game()
+                    return
+                elif finish_button_rect.collidepoint(mouse_pos):
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.flip()
+
 
 # Keyboard input
 def get_keyboard(key, cur_dir):
