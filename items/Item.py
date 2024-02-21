@@ -7,7 +7,7 @@ class Item:
                              random.randrange(1, (frame[1]//10)) * 10] #[x,y] 위치
         self.type = type # 아이템 종류
         self.spawn_time = pygame.time.get_ticks()
-        
+        self.TimeOver = False
         if type==1: #상하좌우반전
             self.color = Color.orange
 
@@ -38,7 +38,7 @@ class Item:
         
         if elapsed_time >= 15000:  # 15초 지나면
             #폭발
-            print("폭발함")
+            self.TimeOver = True
 
         # 폰트 설정
         font = pygame.font.Font(None, 20)  # 기본 폰트, 크기 36

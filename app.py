@@ -238,6 +238,11 @@ def start_game():
         for item in items:
             if item.type == 2:
                 item.update_timer(main_window)
+                if item.TimeOver: 
+                    rt.stop()
+                    itemGenTimer.stop()
+                    game_over(main_window, frame, score)
+                    
             item.draw(main_window)
             if item.position[0] == snake_pos[0] and item.position[1] == snake_pos[1]:
                 i = 1
