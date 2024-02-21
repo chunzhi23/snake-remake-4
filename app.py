@@ -189,24 +189,6 @@ def game_over(window, size, score, time, length):
         pygame.display.flip()
 
 
-# Keyboard input
-def get_keyboard(key, cur_dir):
-    # WASD, 방향키를 입력 받으면 해당 방향으로 이동합니다.
-    # 방향이 반대방향이면 무시합니다.
-    # Chnage direction using WASD or arrow key
-    # Ignore keyboard input if input key has opposite direction
-    if cur_dir != 'DOWN' and key == pygame.K_UP or key == ord('w'):
-        return 'UP'
-    if cur_dir != 'UP' and key == pygame.K_DOWN or key == ord('s'):
-        return 'DOWN'
-    if cur_dir != 'RIGHT' and key == pygame.K_LEFT or key == ord('a'):
-        return 'LEFT'
-    if cur_dir != 'LEFT' and key == pygame.K_RIGHT or key == ord('d'):
-        return 'RIGHT'
-    # 모두 해당하지 않다면 원래 방향을 돌려줍니다.
-    # Return current direction if none of keyboard input occured
-    return cur_dir
-
 # 스톱워치
 class StopWatch(object):
     def __init__(self, interval, score_callback):
