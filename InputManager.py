@@ -6,7 +6,7 @@ class InputManager:
     def init(self):
         self.reverse = False
 
-    def get_default_direction():
+    def get_default_direction(self):
         return "RIGHT"
 
     def on_reverse(self):

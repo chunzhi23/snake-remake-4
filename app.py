@@ -125,7 +125,10 @@ def game_over(window, size, score):
     # 3초 기다린 후 게임을 종료합니다.
     # exit program after 3 seconds.
     time.sleep(3)
-    start_game() # 임시
+    #start_game() # 임시
+    # 게임종료 ( 재시작 방지 )
+    pygame.quit()
+    sys.exit()
 
 # 스톱워치
 class StopWatch(object):
@@ -191,7 +194,7 @@ def start_game():
                 random.randrange(1, (frame[1]//10)) * 10]
     food_spawn = True
 
-    direction = inputManager.getDefaultDirection()
+    direction = inputManager.get_default_direction()
 
     score = 0
 
@@ -266,18 +269,20 @@ def start_game():
                 if item.type == 1:
                     inputManager.on_reverse()
                 if item.type == 2:
-                    i = 1 # 먹으면 제거만?
+                    items.remove(item)
+                    continue # 먹으면 제거만?
                 if item.type == 3:
                     fps += 10
                 if item.type == 4:
                     if fps > 10:
                         fps -= 5
                 if item.type == 5:
+                    print("함정카드")
                     rt.stop()
                     itemGenTimer.stop()
                     game_over(main_window, frame, score)
                 if item.type == 6:
-                    snake_body.insert(0, list(snake_pos))
+                    snake_body.insert(1, list(snake_body[-1]))
                 #아이템 먹음
                 #item.
                 items.remove(item)
