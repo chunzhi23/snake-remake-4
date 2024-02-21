@@ -13,6 +13,7 @@ import pygame
 import random
 import time
 from threading import Timer
+import InputManager
 
 # 1-1. 게임 사전 설정(Settings on the game)
 
@@ -31,6 +32,9 @@ blue = pygame.Color(0, 0, 255)
 
 # 시간을 흐르게 하기 위한 FPS counter
 fps_controller = pygame.time.Clock()
+
+# 입력을 관리하는 InputManager
+inputManager = InputManager(pygame)
 
 # 1-2. Pygame 초기화(Initialize Pygame)
 
@@ -117,24 +121,6 @@ def game_over(window, size, score):
     time.sleep(3)
     start_game() # 임시
 
-# Keyboard input
-def get_keyboard(key, cur_dir):
-    # WASD, 방향키를 입력 받으면 해당 방향으로 이동합니다.
-    # 방향이 반대방향이면 무시합니다.
-    # Chnage direction using WASD or arrow key
-    # Ignore keyboard input if input key has opposite direction
-    if cur_dir != 'DOWN' and key == pygame.K_UP or key == ord('w'):
-        return 'UP'
-    if cur_dir != 'UP' and key == pygame.K_DOWN or key == ord('s'):
-        return 'DOWN'
-    if cur_dir != 'RIGHT' and key == pygame.K_LEFT or key == ord('a'):
-        return 'LEFT'
-    if cur_dir != 'LEFT' and key == pygame.K_RIGHT or key == ord('d'):
-        return 'RIGHT'
-    # 모두 해당하지 않다면 원래 방향을 돌려줍니다.
-    # Return current direction if none of keyboard input occured
-    return cur_dir
-
 # 스톱워치
 class StopWatch(object):
     def __init__(self, interval, score_callback):
@@ -199,7 +185,7 @@ def start_game():
                     pygame.event.post(pygame.event.Event(pygame.QUIT))
                 else:
                     # 입력 키로 방향을 얻어냅니다.
-                    direction = get_keyboard(event.key, direction)
+                    direction = inputManager.get_keyboard(event.key, direction)
 
         # 실제로 뱀의 위치를 옮깁니다.
         if direction == 'UP':
