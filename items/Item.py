@@ -26,7 +26,7 @@ class Item:
         if type==6: #길이증가
             self.color = Color.yellow
 
-    def update_timer(self):
+    def update_timer(self, window):
         global elapsed_time
         # 타이머 업데이트 메서드 - 폭탄 아이템이면 app.py에서 실행
         current_time = pygame.time.get_ticks()  # 현재 시간 가져오기
@@ -39,14 +39,9 @@ class Item:
         if elapsed_time >= 15000:  # 15초 지나면
             #폭발
             print("폭발함")
-    
-    def draw(self, window):
-        pygame.draw.rect(window, self.color,
-                         pygame.Rect(self.position[0], self.position[1], 10, 10))
 
         # 폰트 설정
         font = pygame.font.Font(None, 20)  # 기본 폰트, 크기 36
-        global elapsed_time
         # 텍스트 생성
         text = font.render(str((15000 - elapsed_time)/1000) , True, Color.white)
 
@@ -54,3 +49,9 @@ class Item:
         text_rect = text.get_rect()
         text_rect.topleft = (self.position[0]-15, self.position[1]-20)
         window.blit(text, text_rect)
+    
+    def draw(self, window):
+        pygame.draw.rect(window, self.color,
+                         pygame.Rect(self.position[0], self.position[1], 10, 10))
+
+        

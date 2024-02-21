@@ -181,7 +181,7 @@ def start_game():
 
     rt = StopWatch(1, update_score)
 
-    itemGenTimer = StopWatch(15, gen_item)
+    itemGenTimer = StopWatch(5, gen_item)
 
     while True:
         # 게임에서 event를 받아옵니다.
@@ -235,7 +235,7 @@ def start_game():
 
         for item in items:
             if item.type == 2:
-                item.update_timer()
+                item.update_timer(main_window)
             item.draw(main_window)
         # Game Over 상태를 확인합니다.
         # 바깥 벽 처리를 합니다.
