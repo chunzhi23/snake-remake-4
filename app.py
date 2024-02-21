@@ -14,6 +14,7 @@ import random
 import time
 from threading import Timer
 from InputManager import InputManager
+from items.Item import Item
 
 # 1-1. 게임 사전 설정(Settings on the game)
 
@@ -36,6 +37,8 @@ fps_controller = pygame.time.Clock()
 # 입력을 관리하는 InputManager
 inputManager = InputManager(pygame)
 
+# 아이템 리스트
+items = []
 # 1-2. Pygame 초기화(Initialize Pygame)
 
 def Init(size):
@@ -158,6 +161,8 @@ def start_game():
     
     def gen_item():
         rand = random.randint(1, 6)
+        items.append(Item(frame, rand))
+        print("생성됨")
         # 아이템 새로 생성하는 코드
 
     # Game 관련 변수들
@@ -228,6 +233,10 @@ def start_game():
         pygame.draw.rect(main_window, white,
                         pygame.Rect(food_pos[0], food_pos[1], 10, 10))
 
+        for item in items:
+            if item.type == 2:
+                item.update_timer()
+            item.draw(main_window)
         # Game Over 상태를 확인합니다.
         # 바깥 벽 처리를 합니다.
         if snake_pos[0] < 0 or snake_pos[0] > frame[0] - 10:
