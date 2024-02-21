@@ -123,7 +123,7 @@ def game_over(window, size, score):
     # 3초 기다린 후 게임을 종료합니다.
     # exit program after 3 seconds.
     time.sleep(3)
-    start_game() # 임시
+    
 
 # Keyboard input
 def get_keyboard(key, cur_dir):
@@ -189,8 +189,6 @@ def start_game():
     direction = 'RIGHT'
     score = 0
 
-    main_window = Init(frame)
-
     rt = StopWatch(1, update_score)
     bg = pygame.image.load('img/background1.png')
 
@@ -200,7 +198,7 @@ def start_game():
             # 종료시 실제로 프로그램을 종료합니다.
             if event.type == pygame.QUIT:
                 pygame.quit()
-                return
+                sys.exit()
             elif event.type == pygame.KEYDOWN:
                 # esc 키를 눌렀을떄 종료 신호를 보냅니다.
                 if event.key == pygame.K_ESCAPE:
@@ -276,4 +274,50 @@ def start_game():
         # 해당 FPS만큼 대기합니다.
         fps_controller.tick(fps)
 
-start_game()
+
+def start_screen():
+    running = True
+
+    while running:
+        main_window.fill(white)
+        FONT_TITLE = pygame.font.SysFont('Pretendard', 48)
+        FONT_BUTTON = pygame.font.SysFont('Pretendard', 28)
+
+        draw_text("폭탄제거로봇", FONT_TITLE, black, frame[0] / 2, frame[1] / 4)
+        draw_button("게임 시작", FONT_BUTTON, green, frame[0] / 2 - 70, frame[1] / 2, 140, 60)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                button_rect = pygame.Rect(frame[0] / 2 - 70, frame[1] / 2, 140, 60)
+                if button_rect.collidepoint(mouse_pos):
+                    running = False  # Exit the start screen and start the game
+                    start_game()
+
+        pygame.display.flip()
+
+    pygame.quit()
+    sys.exit()
+
+def draw_text(text, font, color, x, y):
+    text_surface = font.render(text, True, color)
+    text_rect = text_surface.get_rect()
+    text_rect.center = (x, y)
+    main_window.blit(text_surface, text_rect)
+
+def draw_button(text, font, color, x, y, width, height):
+    # Draw shadow
+    shadow_color = (max(0, color[0] - 30), max(0, color[1] - 30), max(0, color[2] - 30))
+    pygame.draw.rect(main_window, shadow_color, (x + 3, y + 3, width, height))
+    
+    # Draw main button
+    pygame.draw.rect(main_window, color, (x, y, width, height))
+    
+    # Draw text
+    draw_text(text, font, black, x + width / 2, y + height / 2)
+
+if __name__ == "__main__":
+    main_window = Init(frame)
+    start_screen()
