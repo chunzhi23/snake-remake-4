@@ -188,6 +188,8 @@ def start_game():
         for event in pygame.event.get():
             # 종료시 실제로 프로그램을 종료합니다.
             if event.type == pygame.QUIT:
+                rt.stop()
+                itemGenTimer.stop()
                 pygame.quit()
                 return
             elif event.type == pygame.KEYDOWN:
@@ -237,6 +239,11 @@ def start_game():
             if item.type == 2:
                 item.update_timer()
             item.draw(main_window)
+            if item.position[0] == snake_pos[0] and item.position[1] == snake_pos[1]:
+                i = 1
+                #아이템 먹음
+                #item.
+        
         # Game Over 상태를 확인합니다.
         # 바깥 벽 처리를 합니다.
         if snake_pos[0] < 0 or snake_pos[0] > frame[0] - 10:
