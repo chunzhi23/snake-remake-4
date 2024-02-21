@@ -27,7 +27,6 @@ class Item:
             self.color = Color.yellow
 
     def update_timer(self, window):
-        global elapsed_time
         # 타이머 업데이트 메서드 - 폭탄 아이템이면 app.py에서 실행
         current_time = pygame.time.get_ticks()  # 현재 시간 가져오기
         elapsed_time = current_time - self.spawn_time  # 경과된 시간 계산
@@ -41,9 +40,9 @@ class Item:
             self.TimeOver = True
 
         # 폰트 설정
-        font = pygame.font.Font(None, 20)  # 기본 폰트, 크기 36
+        font = pygame.font.Font(None, 20)  
         # 텍스트 생성
-        if elapsed_time >= 9000:
+        if elapsed_time >= 9000: #남은 시간 6초 이하면 빨간색으로 표시
             text = font.render(str((15000 - elapsed_time)/1000) , True, Color.red)
         else: text = font.render(str((15000 - elapsed_time)/1000) , True, Color.white)
         # 텍스트의 위치 설정

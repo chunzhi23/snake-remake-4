@@ -37,7 +37,6 @@ fps_controller = pygame.time.Clock()
 # 입력을 관리하는 InputManager
 inputManager = InputManager(pygame)
 
-# 아이템 리스트
 items = []
 # 1-2. Pygame 초기화(Initialize Pygame)
 
@@ -58,6 +57,9 @@ def Init(size):
     # pygame.display를 통해 제목, window size를 설정하고 초기화합니다.
     pygame.display.set_caption('Snake Example with PyGame')
     game_window = pygame.display.set_mode(size)
+    global items
+    # 아이템 리스트 초기화
+    items = []
     return game_window
 
 # ##### 1-3. 기본 logic 함수 모음(basic logics of the game)
