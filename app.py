@@ -55,7 +55,7 @@ def Init(size):
         print('[+] Game successfully initialised')
 
     # pygame.display를 통해 제목, window size를 설정하고 초기화합니다.
-    pygame.display.set_caption('Snake Example with PyGame')
+    pygame.display.set_caption('B.A.M!')
     game_window = pygame.display.set_mode(size)
     global items
     # 아이템 리스트 초기화
@@ -183,7 +183,7 @@ def start_game():
         elif score >= 300 and score <= 600:
             bg = pygame.image.load('img/background3.jpeg')
         else:
-            bg = pygame.image.load('img/background4.jpeg')
+            bg = pygame.image.load('img/background4.png')
         
 
         # print("Score updated to:", score)
