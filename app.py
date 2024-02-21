@@ -83,7 +83,8 @@ def show_score(window, size, choice, color, font, fontsize, score, score_growth=
     # Game over 상황인지 게임중 상황인지에 따라 다른 위치를 선정합니다.
     # Select different location depending on the situation.
     if choice == 1:
-        score_rect.midtop = (size[0]/8, 15)
+        margin_left = 10 
+        score_rect.topleft = (margin_left, 15)
     else:
         score_rect.midtop = (size[0]/2, size[1]/1.25)
 
@@ -92,13 +93,20 @@ def show_score(window, size, choice, color, font, fontsize, score, score_growth=
     window.blit(score_surface, score_rect)
 
 def show_stopwatch(window, size, color, font, fontsize, time):
-    msg = ''
+    msg = f'Survive : {convert_seconds_to_min_sec(time)}'
     time_font = pygame.font.SysFont(font, fontsize)
     time_surface = time_font.render(msg, True, color)
     time_rect = time_surface.get_rect()
-    time_rect.midtop = (size[0]/8, 12)
-
+    
+    margin_right = 10
+    time_rect.topright = (size[0] - margin_right, 15)
+    
     window.blit(time_surface, time_rect)
+
+def convert_seconds_to_min_sec(seconds):
+    mins = seconds // 60
+    secs = seconds % 60
+    return f"{mins}:{secs:02d}"
 
 # Game Over
 def game_over(window, size, score):
@@ -137,10 +145,12 @@ class StopWatch(object):
         self.interval = interval
         self.score_callback = score_callback
         self.is_running = False
+        self.count_seconds = 0
         self.start()
 
     def _run_function(self):
         self.is_running = False
+        self.count_seconds += 1
         self.start()
         self.score_callback()
 
@@ -189,18 +199,17 @@ def start_game():
     # Game 관련 변수들
     snake_pos = [100, 50]
     snake_body = [[100, 50], [100-10, 50], [100-(2*10), 50]]
-
     food_pos = [random.randrange(1, (frame[0]//10)) * 10,
                 random.randrange(1, (frame[1]//10)) * 10]
     food_spawn = True
 
     direction = inputManager.get_default_direction()
-
     score = 0
 
     main_window = Init(frame)
 
     rt = StopWatch(1, update_score)
+    bg = pygame.image.load('img/background1.png')
 
     itemGenTimer = StopWatch(5, gen_item)
 
@@ -246,8 +255,13 @@ def start_game():
             ]
         food_spawn = True
 
-        # 우선 게임을 검은 색으로 채우고 뱀의 각 위치마다 그림을 그립니다.
-        main_window.fill(black)
+
+        main_window.blit(bg, (0, 0))
+
+        dark = pygame.Surface(frame, flags=pygame.SRCALPHA)
+        dark.fill((150, 150, 150, 0))
+        main_window.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
+
         for pos in snake_body:
             pygame.draw.rect(main_window, green,
                             pygame.Rect(pos[0], pos[1], 10, 10))
@@ -309,6 +323,8 @@ def start_game():
         # 점수를 띄워줍니다.
         score_growth = len(snake_body) - 2
         show_score(main_window, frame, 1, white, 'consolas', 20, score, score_growth)
+
+        show_stopwatch(main_window, frame, white, 'consolas', 20, rt.count_seconds)
 
         # 실제 화면에 보이도록 업데이트 해줍니다.
         pygame.display.update()

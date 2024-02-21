@@ -27,6 +27,7 @@ class Item:
             self.color = Color.yellow
 
     def update_timer(self, window):
+
         # 타이머 업데이트 메서드 - 폭탄 아이템이면 app.py에서 실행
         current_time = pygame.time.get_ticks()  # 현재 시간 가져오기
         elapsed_time = current_time - self.spawn_time  # 경과된 시간 계산
@@ -53,5 +54,3 @@ class Item:
     def draw(self, window):
         pygame.draw.rect(window, self.color,
                          pygame.Rect(self.position[0], self.position[1], 10, 10))
-
-        
