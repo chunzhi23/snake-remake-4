@@ -40,9 +40,9 @@ class Item:
             self.TimeOver = True
 
         # 폰트 설정
-        font = pygame.font.Font(None, 20)  # 기본 폰트, 크기 36
+        font = pygame.font.Font(None, 20)  
         # 텍스트 생성
-        if elapsed_time >= 9000:
+        if elapsed_time >= 9000: #남은 시간 6초 이하면 빨간색으로 표시
             text = font.render(str((15000 - elapsed_time)/1000) , True, Color.red)
         else: text = font.render(str((15000 - elapsed_time)/1000) , True, Color.white)
         # 텍스트의 위치 설정
