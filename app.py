@@ -31,6 +31,10 @@ red = pygame.Color(255, 0, 0)
 green = pygame.Color(0, 255, 0)
 blue = pygame.Color(0, 0, 255)
 
+pygame.init()
+backgroundsound = pygame.mixer.Sound( "sound/backgroundmusic.mp3" )
+backgroundsound.play(-1)
+
 # 시간을 흐르게 하기 위한 FPS counter
 fps_controller = pygame.time.Clock()
 
@@ -55,7 +59,7 @@ def Init(size):
         print('[+] Game successfully initialised')
 
     # pygame.display를 통해 제목, window size를 설정하고 초기화합니다.
-    pygame.display.set_caption('B.A.M!')
+    pygame.display.set_caption('Snake Example with PyGame')
     game_window = pygame.display.set_mode(size)
     global items
     # 아이템 리스트 초기화
@@ -188,7 +192,7 @@ def start_game():
             sound.play()
             pygame.mixer.music.stop()
         else:
-            bg = pygame.image.load('img/background4.png')
+            bg = pygame.image.load('img/background4.jpeg')
         
 
         # print("Score updated to:", score)
