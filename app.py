@@ -73,7 +73,8 @@ def show_score(window, size, choice, color, font, fontsize, score, score_growth=
     # Game over 상황인지 게임중 상황인지에 따라 다른 위치를 선정합니다.
     # Select different location depending on the situation.
     if choice == 1:
-        score_rect.midtop = (size[0]/8, 15)
+        margin_left = 10 
+        score_rect.topleft = (margin_left, 15)
     else:
         score_rect.midtop = (size[0]/2, size[1]/1.25)
 
@@ -86,8 +87,10 @@ def show_stopwatch(window, size, color, font, fontsize, time):
     time_font = pygame.font.SysFont(font, fontsize)
     time_surface = time_font.render(msg, True, color)
     time_rect = time_surface.get_rect()
-    time_rect.midtop = (size[0]/8, 15)
-
+    
+    margin_right = 10
+    time_rect.topright = (size[0] - margin_right, 15)
+    
     window.blit(time_surface, time_rect)
 
 def convert_seconds_to_min_sec(seconds):
