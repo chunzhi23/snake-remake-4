@@ -1,6 +1,6 @@
 import pygame
 import random
-import Color
+import items.Color as Color
 class Item:
     def __init__(self, frame, type):
         self.position = [random.randrange(1, (frame[0]//10)) * 10,
@@ -30,6 +30,10 @@ class Item:
         # 타이머 업데이트 메서드 - 폭탄 아이템이면 app.py에서 실행
         current_time = pygame.time.get_ticks()  # 현재 시간 가져오기
         elapsed_time = current_time - self.spawn_time  # 경과된 시간 계산
+        # 깜빡깜빡
+        if self.color == Color.red:
+            self.color = Color.yellow
+        else : self.color = Color.red
         
         if elapsed_time >= 5000:  # 30초 지나면
             #폭발
