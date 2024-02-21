@@ -13,6 +13,7 @@ import pygame
 import random
 import time
 from threading import Timer
+import sqlite3
 
 # 1-1. 게임 사전 설정(Settings on the game)
 
@@ -99,7 +100,7 @@ def convert_seconds_to_min_sec(seconds):
     return f"{mins}:{secs:02d}"
 
 # Game Over
-def game_over(window, size, score):
+def game_over(window, size, score, time, length):
     # 'Game Over'문구를 띄우기 위한 설정입니다.
     # Settings of the 'Game Over' string to show on the screen
     my_font = pygame.font.SysFont('times new roman', 90)
@@ -116,9 +117,20 @@ def game_over(window, size, score):
     # Call 'show_score' function.
     show_score(window, size, 0, green, 'times', 20, score)
 
-    # 그려진 화면을 실제로 띄워줍니다.
-    # Show drawn windows to screen
-    pygame.display.flip()
+    conn = sqlite3.connect('test.db')
+    c = conn.cursor()
+
+    add_score_query = '''INSERT INTO scoreboard 
+    (score, survived_time, snake_length) 
+    VALUES ({0}, {1}, {2})'''.format(score, time, length)
+    try:
+        c.execute(add_score_query)
+        conn.commit()
+        print('Record inserted successfully')
+    except Exception as err:
+        print(err)
+
+    conn.close()
 
     # Button settings
     button_width = 150
@@ -285,20 +297,21 @@ def start_game():
         pygame.draw.rect(main_window, white,
                         pygame.Rect(food_pos[0], food_pos[1], 10, 10))
 
+        snake_length = len(snake_body) - 2
         # Game Over 상태를 확인합니다.
         # 바깥 벽 처리를 합니다.
         if snake_pos[0] < 0 or snake_pos[0] > frame[0] - 10:
             rt.stop()
-            game_over(main_window, frame, score)
+            game_over(main_window, frame, score, rt.count_seconds, snake_length)
         if snake_pos[1] < 0 or snake_pos[1] > frame[1] - 10:
             rt.stop()
-            game_over(main_window, frame, score)
+            game_over(main_window, frame, score, rt.count_seconds, snake_length)
 
         # 뱀의 몸에 닿았는지 확인합니다.
         for block in snake_body[1:]:
             if snake_pos[0] == block[0] and snake_pos[1] == block[1]:
                 rt.stop()
-                game_over(main_window, frame, score)
+                game_over(main_window, frame, score, rt.count_seconds, snake_length)
 
         # 점수를 띄워줍니다.
         score_growth = len(snake_body) - 2
@@ -426,5 +439,19 @@ def draw_description_screen():
 
 
 if __name__ == "__main__":
+    conn = sqlite3.connect('test.db')
+    c = conn.cursor()
+    try:
+        c.execute('''CREATE TABLE IF NOT EXISTS scoreboard 
+                  (trial INTEGER PRIMARY KEY, 
+                  score INTEGER DEFAULT NULL, 
+                  survived_time INTEGER DEFAULT NULL, 
+                  snake_length INTEGER DEFAULT NULL)''')
+        print("Table created successfully")
+    except Exception as err:
+        print(err)
+
+    conn.close()
+
     main_window = Init(frame)
     start_screen()
