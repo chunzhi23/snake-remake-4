@@ -4,7 +4,7 @@ import items.Color as Color
 class Item:
     def __init__(self, frame, type):
         self.position = [random.randrange(1, (frame[0]//10)) * 10,
-                             random.randrange(1, (frame[1]//10)) * 10] #[x,y] 위치
+                             random.randrange(5, (frame[1]//10)) * 10] #[x,y] 위치
         self.type = type # 아이템 종류
         self.spawn_time = pygame.time.get_ticks()
         self.TimeOver = False
