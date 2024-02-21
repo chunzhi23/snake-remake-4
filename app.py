@@ -50,7 +50,16 @@ def Init(size):
     # pygame.display를 통해 제목, window size를 설정하고 초기화합니다.
     pygame.display.set_caption('Snake Example with PyGame')
     game_window = pygame.display.set_mode(size)
+
+    
+
     return game_window
+
+background_image = pygame.image.load('snake-remake-4/img/background1.png')
+background_image.set_alpha(7)
+#background_image = pygame.image.load('/Users/juhyeongpark/Desktop/성균관대 파이썬 교육/snake-remake-4/img/background1.png')
+background_image = pygame.transform.scale(background_image, (720, 480))
+
 
 # ##### 1-3. 기본 logic 함수 모음(basic logics of the game)
 # 게임을 플레이하기 위해 필요한 함수들의 모음입니다.
@@ -173,7 +182,7 @@ def start_game():
     # Game 관련 변수들
     snake_pos = [100, 50]
     snake_body = [[100, 50], [100-10, 50], [100-(2*10), 50]]
-
+    
     food_pos = [random.randrange(1, (frame[0]//10)) * 10,
                 random.randrange(1, (frame[1]//10)) * 10]
     food_spawn = True
@@ -187,6 +196,7 @@ def start_game():
     rt = StopWatch(1, update_score)
 
     while True:
+        main_window.blit(background_image, (0,0))
         # 게임에서 event를 받아옵니다.
         for event in pygame.event.get():
             # 종료시 실제로 프로그램을 종료합니다.
