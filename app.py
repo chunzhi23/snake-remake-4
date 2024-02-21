@@ -183,7 +183,7 @@ def start_game():
         elif score >= 300 and score <= 600:
             bg = pygame.image.load('img/background3.jpeg')
         else:
-            bg = pygame.image.load('img/background4.jpeg')
+            bg = pygame.image.load('img/background4.png')
         
 
         # print("Score updated to:", score)
