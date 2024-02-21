@@ -178,10 +178,12 @@ def start_game():
         score += len(snake_body) - 2
         if score <= 100:
             bg = pygame.image.load('img/background1.png')
-        elif score > 100 and score < 250:
+        elif score > 100 and score < 300:
             bg = pygame.image.load('img/background2.png')
+        elif score >= 300 and score <= 600:
+            bg = pygame.image.load('img/background3.jpeg')
         else:
-            bg = pygame.image.load('img/background333.jpeg')
+            bg = pygame.image.load('img/background4.jpeg')
         
 
         # print("Score updated to:", score)
