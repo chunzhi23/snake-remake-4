@@ -154,6 +154,8 @@ class StopWatch(object):
 
 # 초기화
 def start_game():
+    global fps
+
     def update_score():
         nonlocal score
         score += len(snake_body) - 2
@@ -245,9 +247,24 @@ def start_game():
                     
             item.draw(main_window)
             if item.position[0] == snake_pos[0] and item.position[1] == snake_pos[1]:
-                i = 1
+                if item.type == 1:
+                    inputManager.on_reverse()
+                if item.type == 2:
+                    i = 1 # 먹으면 제거만?
+                if item.type == 3:
+                    fps += 10
+                if item.type == 4:
+                    if fps > 10:
+                        fps -= 5
+                if item.type == 5:
+                    rt.stop()
+                    itemGenTimer.stop()
+                    game_over(main_window, frame, score)
+                if item.type == 6:
+                    snake_body.insert(0, list(snake_pos))
                 #아이템 먹음
                 #item.
+                items.remove(item)
         
         # Game Over 상태를 확인합니다.
         # 바깥 벽 처리를 합니다.
