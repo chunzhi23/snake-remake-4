@@ -155,6 +155,10 @@ def start_game():
         nonlocal score
         score += len(snake_body) - 2
         # print("Score updated to:", score)
+    
+    def gen_item():
+        rand = random.randint(1, 6)
+        # 아이템 새로 생성하는 코드
 
     # Game 관련 변수들
     snake_pos = [100, 50]
@@ -171,6 +175,8 @@ def start_game():
     main_window = Init(frame)
 
     rt = StopWatch(1, update_score)
+
+    itemGenTimer = StopWatch(15, gen_item)
 
     while True:
         # 게임에서 event를 받아옵니다.
