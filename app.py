@@ -100,7 +100,15 @@ def Init(size):
     # Initialise game window using pygame.display
     pygame.display.set_caption('Snake Example with PyGame')
     game_window = pygame.display.set_mode(size)
+
+    
+
     return game_window
+
+background_image = pygame.image.load('snake-remake-4/img/background1.png')
+background_image.set_alpha(7)
+#background_image = pygame.image.load('/Users/juhyeongpark/Desktop/성균관대 파이썬 교육/snake-remake-4/img/background1.png')
+background_image = pygame.transform.scale(background_image, (720, 480))
 
 
 # ##### 1-3. 기본 logic 함수 모음(basic logics of the game)
@@ -192,6 +200,8 @@ main_window = Init(frame)
 while True:
     # 게임에서 event를 받아옵니다.
     # Get event from user
+    main_window.blit(background_image, (0,0))
+
     for event in pygame.event.get():
         # 종료시 실제로 프로그램을 종료합니다.
         # Close program if QUIT event occured
@@ -239,7 +249,7 @@ while True:
 
     # 우선 게임을 검은 색으로 채우고 뱀의 각 위치마다 그림을 그립니다.
     # Fill the screen black and draw each position of snake
-    main_window.fill(black)
+   # main_window.fill(black)
     for pos in snake_body:
         pygame.draw.rect(main_window, green,
                          pygame.Rect(pos[0], pos[1], 10, 10))
@@ -276,4 +286,3 @@ while True:
     # 해당 FPS만큼 대기합니다.
     # Refresh rate
     fps_controller.tick(fps)
-
