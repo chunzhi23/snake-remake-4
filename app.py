@@ -174,7 +174,16 @@ def start_game():
 
     def update_score():
         nonlocal score
+        nonlocal bg
         score += len(snake_body) - 2
+        if score <= 100:
+            bg = pygame.image.load('img/background1.png')
+        elif score > 100 and score < 250:
+            bg = pygame.image.load('img/background2.png')
+        else:
+            bg = pygame.image.load('img/background333.jpeg')
+        
+
         # print("Score updated to:", score)
     
     def gen_item():
@@ -256,7 +265,9 @@ def start_game():
         food_spawn = True
 
 
-        main_window.blit(bg, (0, 0))
+        #main_window.blit(bg, (0, 0))
+        bgsc = pygame.transform.scale(bg, (720,480))
+        main_window.blit(bgsc, (0, 0))
 
         dark = pygame.Surface(frame, flags=pygame.SRCALPHA)
         dark.fill((150, 150, 150, 0))
