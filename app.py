@@ -280,7 +280,9 @@ def start_screen():
         main_window.fill(white)
 
         LOGO = pygame.image.load("img/logo.png")
-        FONT_BUTTON = pygame.font.SysFont('Pretendard', 28)
+        FONT_TITLE_PART = pygame.font.SysFont('Pretendard', 16)
+        FONT_START_BUTTON = pygame.font.SysFont('Pretendard', 28)
+        FONT_DESC_BUTTON = pygame.font.SysFont('Pretendard', 21)
 
         ico_airplane = pygame.image.load("img/ico_airplane.png")
         resized_ico_airplane = pygame.transform.scale(ico_airplane, (200, 200))
@@ -290,9 +292,11 @@ def start_screen():
         rotated_ico_bomb = pygame.transform.rotate(resized_ico_bomb, -30)
 
         draw_image(LOGO, frame[0] / 2, frame[1] / 10)
+        draw_text("폭탄제거로봇", FONT_TITLE_PART, black, frame[0] / 1.7, frame[1] / 2.1)
         draw_image(rotated_ico_airplane, frame[0] / 5, frame[1] / 2.2)
         draw_image(rotated_ico_bomb, frame[0] / 1.2, frame[1] / 2.5)
-        draw_button("게임 시작", FONT_BUTTON, green, frame[0] / 2 - 70, frame[1] / 1.8, 140, 60)
+        draw_button("게임 시작", FONT_START_BUTTON, green, frame[0] / 2 - 70, frame[1] / 1.8, 140, 60)
+        draw_button("게임 설명", FONT_DESC_BUTTON, green, frame[0] / 2 - 70, frame[1] / 1.45, 140, 30)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -300,9 +304,13 @@ def start_screen():
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
-                button_rect = pygame.Rect(frame[0] / 2 - 70, frame[1] / 2, 140, 60)
-                if button_rect.collidepoint(mouse_pos):
+                start_button_rect = pygame.Rect(frame[0] / 2 - 70, frame[1] / 2, 140, 60)
+                desc_button_rect = pygame.Rect(frame[0] / 2 - 70, frame[1] / 1.45, 140, 30)
+                if start_button_rect.collidepoint(mouse_pos):
                     start_game()
+                elif desc_button_rect.collidepoint(mouse_pos):
+                    draw_description_screen()
+                    return
 
         pygame.display.flip()
 
@@ -331,6 +339,53 @@ def draw_button(text, font, color, x, y, width, height):
     
     # Draw text
     draw_text(text, font, black, x + width / 2, y + height / 2)
+
+def draw_description_screen():
+    FONT = pygame.font.SysFont('Pretendard', 18)
+    TITLE_FONT = pygame.font.SysFont('Pretendard', 50)
+
+    main_window.fill(white)
+    draw_text("게임 설명", TITLE_FONT, black, frame[0] // 2, 30)
+
+    draw_text("조작 방법:", FONT, black, frame[0] // 2, 80)
+
+    draw_text("WASD 혹은 방향키를 통하여 뱀이 이동하는 방향을 조정할 수 있습니다.", FONT, black, frame[0] // 2, 120)
+
+    draw_text("아이템 목록:", FONT, black, frame[0] // 2, 160)
+
+    draw_text("1. 상하좌우반전 아이템 (오렌지색):", FONT, black, frame[0] // 2, 200)
+    draw_text("- 플레이어의 이동방향이 입력의 반대가 됩니다.", FONT, black, frame[0] // 2, 230)
+
+    draw_text("2. 폭탄 (점멸):", FONT, black, frame[0] // 2, 260)
+    draw_text("- 플레이어가 제한시간(15초) 이내에 폭탄에 접근하여 폭탄을 제거해야 합니다.", FONT, black, frame[0] // 2, 290)
+
+    draw_text("3. 속도증감 아이템 (하늘색):", FONT, black, frame[0] // 2, 320)
+    draw_text("- 플레이어의 속도를 증가하거나 혹은 감소시킵니다.", FONT, black, frame[0] // 2, 350)
+
+    draw_text("4. 함정 (흰색):", FONT, black, frame[0] // 2, 380)
+    draw_text("- 만약 플레이어가 함정에 닿았다면 게임은 끝나게 됩니다.", FONT, black, frame[0] // 2, 410)
+
+    draw_text("5. 길이 증가 아이템 (노란색):", FONT, black, frame[0] // 2, 440)
+    draw_text("- 아이템을 먹으면 플레이어의 길이가 1만큼 증가합니다.", FONT, black, frame[0] // 2, 470)
+
+    # Draw back button
+    draw_button("돌아가기", FONT, green, 20, 20, 100, 50)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                start_button_rect = pygame.Rect(20, 20, 100, 50)
+                if start_button_rect.collidepoint(mouse_pos):
+                    start_screen()
+
+        pygame.display.flip()
+
+    pygame.display.update()
+
 
 if __name__ == "__main__":
     main_window = Init(frame)
