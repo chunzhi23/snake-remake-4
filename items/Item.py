@@ -21,7 +21,7 @@ class Item:
             self.color = Color.skyblue
 
         if type==5: #함정
-            self.color = Color.black
+            self.color = Color.white
 
         if type==6: #길이증가
             self.color = Color.yellow
@@ -43,8 +43,9 @@ class Item:
         # 폰트 설정
         font = pygame.font.Font(None, 20)  # 기본 폰트, 크기 36
         # 텍스트 생성
-        text = font.render(str((15000 - elapsed_time)/1000) , True, Color.white)
-
+        if elapsed_time >= 9000:
+            text = font.render(str((15000 - elapsed_time)/1000) , True, Color.red)
+        else: text = font.render(str((15000 - elapsed_time)/1000) , True, Color.white)
         # 텍스트의 위치 설정
         text_rect = text.get_rect()
         text_rect.topleft = (self.position[0]-15, self.position[1]-20)
