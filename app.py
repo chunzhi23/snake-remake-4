@@ -479,7 +479,7 @@ def draw_description_screen():
     draw_text(main_window, "- 플레이어의 속도를 증가하거나 혹은 감소시킵니다.", FONT, Color.black, frame[0] // 2, 335)
 
     draw_text(main_window, "4. 함정 (흰색):", FONT, Color.black, frame[0] // 2, 365)
-    draw_text(main_window, "- 만약 플레이어가 함정에 닿았다면 게임은 끝나게 됩니다.", FONT, Color.black, frame[0] // 2, 390)
+    draw_text(main_window, "- 만약 플레이어가 함정에 닿았다면 게임은 끝나게 됩니다. 다만, 일반 음식도 흰색이므로 조심해야 합니다.", FONT, Color.black, frame[0] // 2, 390)
 
     draw_text(main_window, "5. 길이 증가 아이템 (노란색):", FONT, Color.yellow, frame[0] // 2, 420)
     draw_text(main_window, "- 아이템을 먹으면 플레이어의 길이가 1만큼 증가합니다.", FONT, Color.black, frame[0] // 2, 445)
