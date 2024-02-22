@@ -152,7 +152,7 @@ def game_over(window, size, score, time, length):
     
     # Button text and font settings
     button_texts = ["돌아가기", "다시 시작", "게임 종료"]
-    FONT_BUTTON = pygame.font.SysFont('Pretendard', 28)
+    FONT_BUTTON = pygame.font.Font('font\SUITE-Regular.ttf', 24)
 
     # Calculate starting position for buttons
     total_button_width = button_width * 3 + button_margin * 2
