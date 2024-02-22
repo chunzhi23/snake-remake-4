@@ -33,6 +33,7 @@ frame = (720, 480)
 
 pygame.init()
 backgroundsound = pygame.mixer.Sound( "sound/backgroundmusic.mp3" )
+backgroundsound.play(-1)
 
 # 시간을 흐르게 하기 위한 FPS counter
 fps_controller = pygame.time.Clock()
