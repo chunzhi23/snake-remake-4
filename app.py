@@ -406,9 +406,9 @@ def start_screen():
         main_window.fill(Color.white)
 
         LOGO = pygame.image.load("img/logo.png")
-        FONT_TITLE_PART = pygame.font.SysFont('Pretendard', 16)
-        FONT_START_BUTTON = pygame.font.SysFont('Pretendard', 28)
-        FONT_DESC_BUTTON = pygame.font.SysFont('Pretendard', 21)
+        FONT_TITLE_PART = pygame.font.Font('font\SUITE-Regular.ttf', 14)
+        FONT_START_BUTTON = pygame.font.Font('font\SUITE-Regular.ttf', 25)
+        FONT_DESC_BUTTON = pygame.font.Font('font\SUITE-Regular.ttf', 18)
 
         ico_airplane = pygame.image.load("img/ico_airplane.png")
         resized_ico_airplane = pygame.transform.scale(ico_airplane, (200, 200))
@@ -442,8 +442,8 @@ def start_screen():
         
 
 def draw_description_screen():
-    FONT = pygame.font.SysFont('Pretendard', 18)
-    TITLE_FONT = pygame.font.SysFont('Pretendard', 50)
+    FONT = pygame.font.Font("font\SUITE-Regular.ttf", 15)
+    TITLE_FONT = pygame.font.Font('font\SUITE-Regular.ttf', 40)
 
     main_window.fill(Color.white)
     draw_text(main_window, "게임 설명", TITLE_FONT, Color.black, frame[0] // 2, 30)
@@ -455,19 +455,19 @@ def draw_description_screen():
     draw_text(main_window, "아이템 목록:", FONT, Color.black, frame[0] // 2, 160)
 
     draw_text(main_window, "1. 상하좌우반전 아이템 (오렌지색):", FONT, Color.black, frame[0] // 2, 200)
-    draw_text(main_window, "- 플레이어의 이동방향이 입력의 반대가 됩니다.", FONT, Color.black, frame[0] // 2, 230)
+    draw_text(main_window, "- 플레이어의 이동방향이 입력의 반대가 됩니다.", FONT, Color.black, frame[0] // 2, 225)
 
-    draw_text(main_window, "2. 폭탄 (점멸):", FONT, Color.black, frame[0] // 2, 260)
-    draw_text(main_window, "- 플레이어가 제한시간(15초) 이내에 폭탄에 접근하여 폭탄을 제거해야 합니다.", FONT, Color.black, frame[0] // 2, 290)
+    draw_text(main_window, "2. 폭탄 (점멸):", FONT, Color.black, frame[0] // 2, 255)
+    draw_text(main_window, "- 플레이어가 제한시간(15초) 이내에 폭탄에 접근하여 폭탄을 제거해야 합니다.", FONT, Color.black, frame[0] // 2, 280)
 
-    draw_text(main_window, "3. 속도증감 아이템 (하늘색):", FONT, Color.black, frame[0] // 2, 320)
-    draw_text(main_window, "- 플레이어의 속도를 증가하거나 혹은 감소시킵니다.", FONT, Color.black, frame[0] // 2, 350)
+    draw_text(main_window, "3. 속도증감 아이템 (하늘색):", FONT, Color.black, frame[0] // 2, 310)
+    draw_text(main_window, "- 플레이어의 속도를 증가하거나 혹은 감소시킵니다.", FONT, Color.black, frame[0] // 2, 335)
 
-    draw_text(main_window, "4. 함정 (흰색):", FONT, Color.black, frame[0] // 2, 380)
-    draw_text(main_window, "- 만약 플레이어가 함정에 닿았다면 게임은 끝나게 됩니다.", FONT, Color.black, frame[0] // 2, 410)
+    draw_text(main_window, "4. 함정 (흰색):", FONT, Color.black, frame[0] // 2, 365)
+    draw_text(main_window, "- 만약 플레이어가 함정에 닿았다면 게임은 끝나게 됩니다.", FONT, Color.black, frame[0] // 2, 390)
 
-    draw_text(main_window, "5. 길이 증가 아이템 (노란색):", FONT, Color.black, frame[0] // 2, 440)
-    draw_text(main_window, "- 아이템을 먹으면 플레이어의 길이가 1만큼 증가합니다.", FONT, Color.black, frame[0] // 2, 470)
+    draw_text(main_window, "5. 길이 증가 아이템 (노란색):", FONT, Color.black, frame[0] // 2, 420)
+    draw_text(main_window, "- 아이템을 먹으면 플레이어의 길이가 1만큼 증가합니다.", FONT, Color.black, frame[0] // 2, 445)
 
     # Draw back button
     draw_button(main_window, "돌아가기", FONT, Color.green, 20, 20, 100, 50)
