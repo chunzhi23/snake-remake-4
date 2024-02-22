@@ -69,7 +69,7 @@ def Init(size):
         print('[+] Game successfully initialised')
 
     # pygame.display를 통해 제목, window size를 설정하고 초기화합니다.
-    pygame.display.set_caption('Snake Example with PyGame')
+    pygame.display.set_caption('BAM!')
     game_window = pygame.display.set_mode(size)
     global items
     # 아이템 리스트 초기화
