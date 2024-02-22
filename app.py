@@ -222,20 +222,29 @@ def start_game():
     def update_score():
         nonlocal score
         nonlocal bg
+        nonlocal stage_played
         sound = pygame.mixer.Sound( "sound/stageclear.wav" )
         score += len(snake_body) - 2
-        if score <= 10:
-            bg = pygame.image.load('img/background1.png')
-        elif score > 10 and score < 30:
-            bg = pygame.image.load('img/background2.png')
-            sound.play()
-            pygame.mixer.music.stop()
-        elif score >= 30 and score <= 60:
-            bg = pygame.image.load('img/background3.jpeg')
-            sound.play()
-            pygame.mixer.music.stop()
+        if score <= 100:
+            if not stage_played[0]:
+                stage_played[0] = True
+                bg = pygame.image.load('img/background1.png')
+        elif score > 100 and score < 300:
+            if not stage_played[1]:
+                stage_played[1] = True
+                bg = pygame.image.load('img/background2.png')
+                sound.play()
+                # pygame.mixer.music.stop()
+        elif score >= 300 and score <= 600:
+            if not stage_played[2]:
+                stage_played[2] = True
+                bg = pygame.image.load('img/background3.jpeg')
+                sound.play()
+                # pygame.mixer.music.stop()
         else:
-            bg = pygame.image.load('img/background4.png')
+            if not stage_played[3]:
+                stage_played[3] = True
+                bg = pygame.image.load('img/background4.png')
         
 
         # print("Score updated to:", score)
@@ -271,6 +280,8 @@ def start_game():
 
     rt = StopWatch(1, update_score)
     bg = pygame.image.load('img/background1.png')
+
+    stage_played = [False, False, False]
 
     itemGenTimer = StopWatch(5, gen_item)
 
