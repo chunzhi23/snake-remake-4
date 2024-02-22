@@ -11,10 +11,10 @@ subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pygame'])
 # #### 1. 모듈 임포트(Module import)
 import pygame
 import random
-import time
 from threading import Timer
 from InputManager import InputManager
-from items.Item import Item, Color
+from items.Item import Item
+from items import Color
 import sqlite3
 
 # 1-1. 게임 사전 설정(Settings on the game)
