@@ -6,16 +6,19 @@
 # 0-1. 사전 준비(prerequirements)
 import sys
 import subprocess
+
+from screen.modules import draw_button, draw_image, draw_text
 subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pygame'])
 
 # #### 1. 모듈 임포트(Module import)
 import pygame
 import random
+import sqlite3
 from threading import Timer
+
 from InputManager import InputManager
 from items.Item import Item
 from items import Color
-import sqlite3
 
 # 1-1. 게임 사전 설정(Settings on the game)
 
@@ -155,7 +158,7 @@ def game_over(window, size, score, time, length):
 
     for i, text in enumerate(button_texts):
         button_x = start_x + (button_width + button_margin) * i
-        draw_button(text, FONT_BUTTON, (Color.red, Color.green, Color.blue)[i], button_x, start_y, button_width, button_height)
+        draw_button(main_window, text, FONT_BUTTON, (Color.red, Color.green, Color.blue)[i], button_x, start_y, button_width, button_height)
 
     while True:
         for event in pygame.event.get():
@@ -414,12 +417,12 @@ def start_screen():
         resized_ico_bomb = pygame.transform.scale(ico_bomb, (100, 100))
         rotated_ico_bomb = pygame.transform.rotate(resized_ico_bomb, -30)
 
-        draw_image(LOGO, frame[0] / 2, frame[1] / 10)
-        draw_text("폭탄제거로봇", FONT_TITLE_PART, Color.black, frame[0] / 1.7, frame[1] / 2.1)
-        draw_image(rotated_ico_airplane, frame[0] / 5, frame[1] / 2.2)
-        draw_image(rotated_ico_bomb, frame[0] / 1.2, frame[1] / 2.5)
-        draw_button("게임 시작", FONT_START_BUTTON, Color.green, frame[0] / 2 - 70, frame[1] / 1.8, 140, 60)
-        draw_button("게임 설명", FONT_DESC_BUTTON, Color.green, frame[0] / 2 - 70, frame[1] / 1.45, 140, 30)
+        draw_image(main_window, LOGO, frame[0] / 2, frame[1] / 10)
+        draw_text(main_window, "폭탄제거로봇", FONT_TITLE_PART, Color.black, frame[0] / 1.7, frame[1] / 2.1)
+        draw_image(main_window, rotated_ico_airplane, frame[0] / 5, frame[1] / 2.2)
+        draw_image(main_window, rotated_ico_bomb, frame[0] / 1.2, frame[1] / 2.5)
+        draw_button(main_window, "게임 시작", FONT_START_BUTTON, Color.green, frame[0] / 2 - 70, frame[1] / 1.8, 140, 60)
+        draw_button(main_window, "게임 설명", FONT_DESC_BUTTON, Color.green, frame[0] / 2 - 70, frame[1] / 1.45, 140, 30)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -436,63 +439,38 @@ def start_screen():
                     return
 
         pygame.display.flip()
-
-def draw_text(text, font, color, x, y):
-    text_surface = font.render(text, True, color)
-    text_rect = text_surface.get_rect()
-    text_rect.center = (x, y)
-    main_window.blit(text_surface, text_rect)
-
-def draw_image(image, x, y):
-    # Calculate the position to center the image at the top
-    image_rect = image.get_rect()
-    x_pos = x - image_rect.width / 2
-    y_pos = y
-
-    # Draw the image
-    main_window.blit(image, (x_pos, y_pos))
-
-def draw_button(text, font, color, x, y, width, height):
-    # Draw shadow
-    shadow_color = (max(0, color[0] - 30), max(0, color[1] - 30), max(0, color[2] - 30))
-    pygame.draw.rect(main_window, shadow_color, (x + 3, y + 3, width, height))
-    
-    # Draw main button
-    pygame.draw.rect(main_window, color, (x, y, width, height))
-    
-    # Draw text
-    draw_text(text, font, Color.black, x + width / 2, y + height / 2)
+        
 
 def draw_description_screen():
     FONT = pygame.font.SysFont('Pretendard', 18)
     TITLE_FONT = pygame.font.SysFont('Pretendard', 50)
 
     main_window.fill(Color.white)
-    draw_text("게임 설명", TITLE_FONT, Color.black, frame[0] // 2, 30)
+    draw_text(main_window, "게임 설명", TITLE_FONT, Color.black, frame[0] // 2, 30)
 
-    draw_text("조작 방법:", FONT, Color.black, frame[0] // 2, 80)
+    draw_text(main_window, "조작 방법:", FONT, Color.black, frame[0] // 2, 80)
 
-    draw_text("WASD 혹은 방향키를 통하여 뱀이 이동하는 방향을 조정할 수 있습니다.", FONT, Color.black, frame[0] // 2, 120)
+    draw_text(main_window, "WASD 혹은 방향키를 통하여 뱀이 이동하는 방향을 조정할 수 있습니다.", FONT, Color.black, frame[0] // 2, 120)
 
-    draw_text("아이템 목록:", FONT, Color.black, frame[0] // 2, 160)
+    draw_text(main_window, "아이템 목록:", FONT, Color.black, frame[0] // 2, 160)
 
-    draw_text("1. 상하좌우반전 아이템 (오렌지색):", FONT, Color.black, frame[0] // 2, 200)
-    draw_text("- 플레이어의 이동방향이 입력의 반대가 됩니다.", FONT, Color.black, frame[0] // 2, 230)
+    draw_text(main_window, "1. 상하좌우반전 아이템 (오렌지색):", FONT, Color.black, frame[0] // 2, 200)
+    draw_text(main_window, "- 플레이어의 이동방향이 입력의 반대가 됩니다.", FONT, Color.black, frame[0] // 2, 230)
 
-    draw_text("2. 폭탄 (점멸):", FONT, Color.black, frame[0] // 2, 260)
-    draw_text("- 플레이어가 제한시간(15초) 이내에 폭탄에 접근하여 폭탄을 제거해야 합니다.", FONT, Color.black, frame[0] // 2, 290)
+    draw_text(main_window, "2. 폭탄 (점멸):", FONT, Color.black, frame[0] // 2, 260)
+    draw_text(main_window, "- 플레이어가 제한시간(15초) 이내에 폭탄에 접근하여 폭탄을 제거해야 합니다.", FONT, Color.black, frame[0] // 2, 290)
 
-    draw_text("3. 속도증감 아이템 (하늘색):", FONT, Color.black, frame[0] // 2, 320)
-    draw_text("- 플레이어의 속도를 증가하거나 혹은 감소시킵니다.", FONT, Color.black, frame[0] // 2, 350)
+    draw_text(main_window, "3. 속도증감 아이템 (하늘색):", FONT, Color.black, frame[0] // 2, 320)
+    draw_text(main_window, "- 플레이어의 속도를 증가하거나 혹은 감소시킵니다.", FONT, Color.black, frame[0] // 2, 350)
 
-    draw_text("4. 함정 (흰색):", FONT, Color.black, frame[0] // 2, 380)
-    draw_text("- 만약 플레이어가 함정에 닿았다면 게임은 끝나게 됩니다.", FONT, Color.black, frame[0] // 2, 410)
+    draw_text(main_window, "4. 함정 (흰색):", FONT, Color.black, frame[0] // 2, 380)
+    draw_text(main_window, "- 만약 플레이어가 함정에 닿았다면 게임은 끝나게 됩니다.", FONT, Color.black, frame[0] // 2, 410)
 
-    draw_text("5. 길이 증가 아이템 (노란색):", FONT, Color.black, frame[0] // 2, 440)
-    draw_text("- 아이템을 먹으면 플레이어의 길이가 1만큼 증가합니다.", FONT, Color.black, frame[0] // 2, 470)
+    draw_text(main_window, "5. 길이 증가 아이템 (노란색):", FONT, Color.black, frame[0] // 2, 440)
+    draw_text(main_window, "- 아이템을 먹으면 플레이어의 길이가 1만큼 증가합니다.", FONT, Color.black, frame[0] // 2, 470)
 
     # Draw back button
-    draw_button("돌아가기", FONT, Color.green, 20, 20, 100, 50)
+    draw_button(main_window, "돌아가기", FONT, Color.green, 20, 20, 100, 50)
 
     while True:
         for event in pygame.event.get():
