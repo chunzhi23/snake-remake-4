@@ -285,7 +285,7 @@ def start_game():
     rt = StopWatch(1, update_score)
     bg = pygame.image.load('img/background1.png')
 
-    stage_played = [False, False, False]
+    stage_played = [False, False, False, False]
 
     itemGenTimer = StopWatch(5, gen_item)
 
