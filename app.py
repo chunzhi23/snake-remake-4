@@ -33,7 +33,11 @@ frame = (720, 480)
 
 pygame.init()
 backgroundsound = pygame.mixer.Sound( "sound/backgroundmusic.mp3" )
+backgroundsound.set_volume(80)
 backgroundsound.play(-1)
+
+normal_get_item_sound = pygame.mixer.Sound("sound/itemget1.wav")
+bomb_get_item_sound = pygame.mixer.Sound("sound/itemget2.wav")
 
 # 시간을 흐르게 하기 위한 FPS counter
 fps_controller = pygame.time.Clock()
@@ -175,6 +179,11 @@ def game_over(window, size, score, time, length, death_message=""):
     for i, text in enumerate(button_texts):
         button_x = start_x + (button_width + button_margin) * i
         draw_button(main_window, text, FONT_BUTTON, (Color.red, Color.green, Color.blue)[i], button_x, start_y, button_width, button_height)
+
+    # play gameover sound
+    if sound_on:
+        gameover_sound = pygame.mixer.Sound("sound/gameover.wav")
+        gameover_sound.play()
 
     while True:
         for event in pygame.event.get():
@@ -373,31 +382,48 @@ def start_game():
                     rt.stop()
                     itemGenTimer.stop()
                     dm = "제한시간 내에 폭탄을 제거하지 못했습니다."
+                    if sound_on:
+                        bomb_sound = pygame.mixer.Sound("sound/bombsound.wav")
+                        bomb_sound.play()
                     game_over(main_window, frame, score, rt.count_seconds, snake_length, dm)
                     
             item.draw(main_window)
             if item.position[0] == snake_pos[0] and item.position[1] == snake_pos[1]:
+                global normal_get_item_sound
+                global bomb_get_item_sound
                 if item.type == 1:
                     inputManager.on_reverse()
                     snake_body.insert(1, list(snake_body[-1]))
+                    if sound_on:
+                        normal_get_item_sound.play()
                 if item.type == 2:
                     items.remove(item)
                     snake_body.insert(1, list(snake_body[-1]))
-                    continue # 먹으면 제거만?
+                    if sound_on:
+                        bomb_get_item_sound.play()
+                    continue
                 if item.type == 3:
                     fps += 10
                     snake_body.insert(1, list(snake_body[-1]))
+                    if sound_on:
+                        normal_get_item_sound.play()
                 if item.type == 4:
                     if fps > 10:
                         fps -= 5
                     snake_body.insert(1, list(snake_body[-1]))
+                    if sound_on:
+                        normal_get_item_sound.play()
                 if item.type == 5:
                     print("함정카드")
                     rt.stop()
                     itemGenTimer.stop()
                     dm = "함정에 걸렸습니다."
+                    if sound_on:
+                        bomb_get_item_sound.play()
                     game_over(main_window, frame, score, rt.count_seconds, snake_length, dm)
                 if item.type == 6:
+                    if sound_on:
+                        normal_get_item_sound.play()
                     snake_body.insert(1, list(snake_body[-1]))
                 #아이템 먹음
                 #item.
@@ -484,7 +510,7 @@ def start_screen():
                     if not sound_on:
                         backgroundsound.set_volume(0)
                     else:
-                        backgroundsound.set_volume(100)
+                        backgroundsound.set_volume(80)
                     start_screen()
                     return
 
