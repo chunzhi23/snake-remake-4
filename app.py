@@ -25,12 +25,14 @@ from items import Color
 # Frame 수 조절(초당 그려지는 수)
 fps = 15
 
+# 사운드 재생 여부
+sound_on = True
+
 # 창의 크기
 frame = (720, 480)
 
 pygame.init()
 backgroundsound = pygame.mixer.Sound( "sound/backgroundmusic.mp3" )
-backgroundsound.play(-1)
 
 # 시간을 흐르게 하기 위한 FPS counter
 fps_controller = pygame.time.Clock()
@@ -40,7 +42,7 @@ inputManager = InputManager(pygame)
 
 items = []
 
-sound_on = True
+
 # 1-2. Pygame 초기화(Initialize Pygame)
 
 def Init(size):
@@ -230,6 +232,7 @@ def start_game():
         nonlocal score
         nonlocal bg
         nonlocal stage_played
+        global sound_on
         sound = pygame.mixer.Sound( "sound/stageclear.wav" )
         score += len(snake_body) - 2
         if score <= 100:
@@ -240,18 +243,22 @@ def start_game():
             if not stage_played[1]:
                 stage_played[1] = True
                 bg = pygame.image.load('img/background2.png')
-                sound.play()
+                if sound_on:
+                    sound.play()
                 # pygame.mixer.music.stop()
         elif score >= 300 and score <= 600:
             if not stage_played[2]:
                 stage_played[2] = True
                 bg = pygame.image.load('img/background3.jpeg')
-                sound.play()
+                if sound_on:
+                    sound.play()
                 # pygame.mixer.music.stop()
         else:
             if not stage_played[3]:
                 stage_played[3] = True
                 bg = pygame.image.load('img/background4.png')
+                if sound_on:
+                    sound.play()
         
 
         # print("Score updated to:", score)
@@ -441,7 +448,9 @@ def start_screen():
         draw_image(main_window, rotated_ico_bomb, frame[0] / 1.2, frame[1] / 2.5)
         draw_button(main_window, "게임 시작", FONT_START_BUTTON, Color.green, frame[0] / 2 - 70, frame[1] / 1.8, 140, 60)
         draw_button(main_window, "게임 설명", FONT_DESC_BUTTON, Color.green, frame[0] / 2 - 70, frame[1] / 1.45, 140, 30)
-
+        global sound_on
+        sound_btn_text = "사운드: " + ("ON" if sound_on else "OFF")
+        draw_button(main_window, sound_btn_text, FONT_DESC_BUTTON, Color.yellow, frame[0] - 200 , frame[1] - 50, 140, 30)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -451,10 +460,20 @@ def start_screen():
                 mouse_pos = pygame.mouse.get_pos()
                 start_button_rect = pygame.Rect(frame[0] / 2 - 70, frame[1] / 2, 140, 60)
                 desc_button_rect = pygame.Rect(frame[0] / 2 - 70, frame[1] / 1.45, 140, 30)
+                sound_button_rect = pygame.Rect(frame[0] - 200 , frame[1] - 50, 140, 30)
                 if start_button_rect.collidepoint(mouse_pos):
                     start_game()
                 elif desc_button_rect.collidepoint(mouse_pos):
                     draw_description_screen()
+                    return
+                elif sound_button_rect.collidepoint(mouse_pos):
+                    sound_on = False if sound_on else True
+                    global backgroundsound
+                    if not sound_on:
+                        backgroundsound.set_volume(0)
+                    else:
+                        backgroundsound.set_volume(100)
+                    start_screen()
                     return
 
         pygame.display.flip()
