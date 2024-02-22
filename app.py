@@ -469,19 +469,19 @@ def draw_description_screen():
 
     draw_text(main_window, "아이템 목록:", FONT, Color.black, frame[0] // 2, 160)
 
-    draw_text(main_window, "1. 상하좌우반전 아이템 (오렌지색):", FONT, Color.black, frame[0] // 2, 200)
+    draw_text(main_window, "1. 상하좌우반전 아이템 (오렌지색):", FONT, Color.orange, frame[0] // 2, 200)
     draw_text(main_window, "- 플레이어의 이동방향이 입력의 반대가 됩니다.", FONT, Color.black, frame[0] // 2, 225)
 
-    draw_text(main_window, "2. 폭탄 (점멸):", FONT, Color.black, frame[0] // 2, 255)
+    draw_text(main_window, "2. 폭탄 (점멸):", FONT, Color.red, frame[0] // 2, 255)
     draw_text(main_window, "- 플레이어가 제한시간(15초) 이내에 폭탄에 접근하여 폭탄을 제거해야 합니다.", FONT, Color.black, frame[0] // 2, 280)
 
-    draw_text(main_window, "3. 속도증감 아이템 (하늘색):", FONT, Color.black, frame[0] // 2, 310)
+    draw_text(main_window, "3. 속도증감 아이템 (하늘색):", FONT, Color.skyblue, frame[0] // 2, 310)
     draw_text(main_window, "- 플레이어의 속도를 증가하거나 혹은 감소시킵니다.", FONT, Color.black, frame[0] // 2, 335)
 
     draw_text(main_window, "4. 함정 (흰색):", FONT, Color.black, frame[0] // 2, 365)
     draw_text(main_window, "- 만약 플레이어가 함정에 닿았다면 게임은 끝나게 됩니다.", FONT, Color.black, frame[0] // 2, 390)
 
-    draw_text(main_window, "5. 길이 증가 아이템 (노란색):", FONT, Color.black, frame[0] // 2, 420)
+    draw_text(main_window, "5. 길이 증가 아이템 (노란색):", FONT, Color.yellow, frame[0] // 2, 420)
     draw_text(main_window, "- 아이템을 먹으면 플레이어의 길이가 1만큼 증가합니다.", FONT, Color.black, frame[0] // 2, 445)
 
     # Draw back button
