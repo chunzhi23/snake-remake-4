@@ -345,8 +345,11 @@ def start_game():
 
         # 우선 증가시키고 음식의 위치가 아니라면 마지막을 뺍니다.
         snake_body.insert(0, list(snake_pos))
+        global normal_get_item_sound
         if snake_pos[0] == food_pos[0] and snake_pos[1] == food_pos[1]:
             food_spawn = False
+            if sound_on:
+                normal_get_item_sound.play()
         else:
             snake_body.pop()
 
@@ -389,7 +392,7 @@ def start_game():
                     
             item.draw(main_window)
             if item.position[0] == snake_pos[0] and item.position[1] == snake_pos[1]:
-                global normal_get_item_sound
+                #global normal_get_item_sound
                 global bomb_get_item_sound
                 if item.type == 1:
                     inputManager.on_reverse()
