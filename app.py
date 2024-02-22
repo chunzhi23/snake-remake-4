@@ -116,7 +116,7 @@ def convert_seconds_to_min_sec(seconds):
     return f"{mins}:{secs:02d}"
 
 # Game Over
-def game_over(window, size, score, time, length):
+def game_over(window, size, score, time, length, death_message=""):
     # 'Game Over'문구를 띄우기 위한 설정입니다.
     # Settings of the 'Game Over' string to show on the screen
     my_font = pygame.font.SysFont('times new roman', 90)
@@ -124,10 +124,17 @@ def game_over(window, size, score, time, length):
     game_over_rect = game_over_surface.get_rect()
     game_over_rect.midtop = (size[0]/2, size[1]/4)
 
+    #사망 사유 표시
+    r_font = pygame.font.Font('font\SUITE-Regular.ttf', 15)
+    reason_surface = r_font.render(death_message, True, Color.red)
+    reason_rect = reason_surface.get_rect()
+    reason_rect.midtop = (size[0]/2, size[1]/4 + 100)
+
     # window를 검은색으로 칠하고 설정했던 글자를 window에 복사합니다.
     # Fill window as black and copy 'Game Over' strings to main window.
     window.fill(Color.black)
     window.blit(game_over_surface, game_over_rect)
+    window.blit(reason_surface, reason_rect)
 
     # 'show_score' 함수를 부릅니다.
     # Call 'show_score' function.
@@ -357,7 +364,8 @@ def start_game():
                 if item.TimeOver: 
                     rt.stop()
                     itemGenTimer.stop()
-                    game_over(main_window, frame, score, rt.count_seconds, snake_length)
+                    dm = "제한시간 내에 폭탄을 제거하지 못했습니다."
+                    game_over(main_window, frame, score, rt.count_seconds, snake_length, dm)
                     
             item.draw(main_window)
             if item.position[0] == snake_pos[0] and item.position[1] == snake_pos[1]:
@@ -379,7 +387,8 @@ def start_game():
                     print("함정카드")
                     rt.stop()
                     itemGenTimer.stop()
-                    game_over(main_window, frame, score, rt.count_seconds, snake_length)
+                    dm = "함정에 걸렸습니다."
+                    game_over(main_window, frame, score, rt.count_seconds, snake_length, dm)
                 if item.type == 6:
                     snake_body.insert(1, list(snake_body[-1]))
                 #아이템 먹음
@@ -392,19 +401,21 @@ def start_game():
         if snake_pos[0] < 0 or snake_pos[0] > frame[0] - 10:
             rt.stop()
             itemGenTimer.stop()
-
-            game_over(main_window, frame, score, rt.count_seconds, snake_length)
+            dm = "벽에 부딪혔습니다."
+            game_over(main_window, frame, score, rt.count_seconds, snake_length, dm)
         if snake_pos[1] < 0 or snake_pos[1] > frame[1] - 10:
             rt.stop()
             itemGenTimer.stop()
-            game_over(main_window, frame, score, rt.count_seconds, snake_length)
+            dm = "벽에 부딪혔습니다."
+            game_over(main_window, frame, score, rt.count_seconds, snake_length, dm)
 
         # 뱀의 몸에 닿았는지 확인합니다.
         for block in snake_body[1:]:
             if snake_pos[0] == block[0] and snake_pos[1] == block[1]:
                 rt.stop()
                 itemGenTimer.stop()
-                game_over(main_window, frame, score, rt.count_seconds, snake_length)
+                dm = "자신의 몸에 부딪혔습니다."
+                game_over(main_window, frame, score, rt.count_seconds, snake_length, dm)
 
         # 점수를 띄워줍니다.
         score_growth = len(snake_body) - 2
