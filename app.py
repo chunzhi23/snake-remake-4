@@ -39,6 +39,8 @@ fps_controller = pygame.time.Clock()
 inputManager = InputManager(pygame)
 
 items = []
+
+sound_on = True
 # 1-2. Pygame 초기화(Initialize Pygame)
 
 def Init(size):
@@ -48,6 +50,7 @@ def Init(size):
 
     global fps
     fps = 15
+
 
     # pygame.init() example output -> (6, 0)
     # 두번째 항목이 error의 수를 알려줍니다.
@@ -354,7 +357,7 @@ def start_game():
                 if item.TimeOver: 
                     rt.stop()
                     itemGenTimer.stop()
-                    game_over(main_window, frame, score)
+                    game_over(main_window, frame, score, rt.count_seconds, snake_length)
                     
             item.draw(main_window)
             if item.position[0] == snake_pos[0] and item.position[1] == snake_pos[1]:
@@ -438,6 +441,7 @@ def start_screen():
         draw_image(main_window, rotated_ico_bomb, frame[0] / 1.2, frame[1] / 2.5)
         draw_button(main_window, "게임 시작", FONT_START_BUTTON, Color.green, frame[0] / 2 - 70, frame[1] / 1.8, 140, 60)
         draw_button(main_window, "게임 설명", FONT_DESC_BUTTON, Color.green, frame[0] / 2 - 70, frame[1] / 1.45, 140, 30)
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
