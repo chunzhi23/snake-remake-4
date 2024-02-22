@@ -46,6 +46,9 @@ def Init(size):
     check_errors = pygame.init()
     inputManager.init()
 
+    global fps
+    fps = 15
+
     # pygame.init() example output -> (6, 0)
     # 두번째 항목이 error의 수를 알려줍니다.
     if check_errors[1] > 0:
@@ -218,7 +221,8 @@ class StopWatch(object):
 # 초기화
 def start_game():
     global fps
-
+    global main_window
+    main_window = Init(frame)
     def update_score():
         nonlocal score
         nonlocal bg
@@ -372,7 +376,7 @@ def start_game():
                     print("함정카드")
                     rt.stop()
                     itemGenTimer.stop()
-                    game_over(main_window, frame, score)
+                    game_over(main_window, frame, score, rt.count_seconds, snake_length)
                 if item.type == 6:
                     snake_body.insert(1, list(snake_body[-1]))
                 #아이템 먹음
