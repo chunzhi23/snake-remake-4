@@ -7,7 +7,7 @@
 import sys
 import subprocess
 
-from screen.modules import draw_button, draw_image, draw_text
+from screen.modules import draw_button, draw_image, draw_table, draw_text
 subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pygame'])
 
 # #### 1. 모듈 임포트(Module import)
@@ -35,6 +35,9 @@ pygame.init()
 backgroundsound = pygame.mixer.Sound( "sound/backgroundmusic.mp3" )
 backgroundsound.set_volume(80)
 backgroundsound.play(-1)
+
+FONT = pygame.font.Font("font\SUITE-Regular.ttf", 15)
+TITLE_FONT = pygame.font.Font('font\SUITE-Regular.ttf', 40)
 
 normal_get_item_sound = pygame.mixer.Sound("sound/itemget1.wav")
 bomb_get_item_sound = pygame.mixer.Sound("sound/itemget2.wav")
@@ -489,9 +492,12 @@ def start_screen():
         draw_image(main_window, rotated_ico_bomb, frame[0] / 1.2, frame[1] / 2.5)
         draw_button(main_window, "게임 시작", FONT_START_BUTTON, Color.green, frame[0] / 2 - 70, frame[1] / 1.8, 140, 60)
         draw_button(main_window, "게임 설명", FONT_DESC_BUTTON, Color.green, frame[0] / 2 - 70, frame[1] / 1.45, 140, 30)
+        
         global sound_on
         sound_btn_text = "사운드: " + ("ON" if sound_on else "OFF")
-        draw_button(main_window, sound_btn_text, FONT_DESC_BUTTON, Color.yellow, frame[0] - 200 , frame[1] - 50, 140, 30)
+        draw_button(main_window, sound_btn_text, FONT_DESC_BUTTON, Color.yellow, frame[0] - 230 , frame[1] - 50, 140, 30)
+        
+        draw_button(main_window, "랭킹", FONT_DESC_BUTTON, Color.yellow, frame[0] - 80 , frame[1] - 50, 50, 30)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -501,7 +507,8 @@ def start_screen():
                 mouse_pos = pygame.mouse.get_pos()
                 start_button_rect = pygame.Rect(frame[0] / 2 - 70, frame[1] / 2, 140, 60)
                 desc_button_rect = pygame.Rect(frame[0] / 2 - 70, frame[1] / 1.45, 140, 30)
-                sound_button_rect = pygame.Rect(frame[0] - 200 , frame[1] - 50, 140, 30)
+                sound_button_rect = pygame.Rect(frame[0] - 230 , frame[1] - 50, 140, 30)
+                ranking_button_rect = pygame.Rect(frame[0] - 80 , frame[1] - 50, 50, 30)
                 if start_button_rect.collidepoint(mouse_pos):
                     start_game()
                 elif desc_button_rect.collidepoint(mouse_pos):
@@ -515,6 +522,9 @@ def start_screen():
                     else:
                         backgroundsound.set_volume(80)
                     start_screen()
+                    return
+                elif ranking_button_rect.collidepoint(mouse_pos):
+                    draw_ranking_screen()
                     return
 
         pygame.display.flip()
@@ -561,10 +571,49 @@ def draw_description_screen():
                 start_button_rect = pygame.Rect(20, 20, 100, 50)
                 if start_button_rect.collidepoint(mouse_pos):
                     start_screen()
+                    return
 
         pygame.display.flip()
 
-    pygame.display.update()
+
+def draw_ranking_screen():
+    main_window.fill(Color.white)
+    conn = sqlite3.connect('test.db')
+    c = conn.cursor()
+
+    try:
+        c.execute('SELECT * FROM scoreboard')
+        
+        rows = c.fetchall()
+        records = sorted(rows, key=lambda item: item[1], reverse=True)[:7]
+        records = [(record[0], record[1], convert_seconds_to_min_sec(record[-2]), *record[3:]) for record in records]
+
+        records.insert(0, ("순위", "점수", "시간", "레벨"))
+
+        draw_text(main_window, "랭킹", TITLE_FONT, Color.black, frame[0] // 2, 30)
+
+        draw_table(main_window, records, FONT, frame, 10, 10)
+
+        # Draw back button
+        draw_button(main_window, "돌아가기", FONT, Color.green, 20, 20, 100, 50)
+    except Exception as err:
+        print(err)
+
+    conn.close()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                start_button_rect = pygame.Rect(20, 20, 100, 50)
+                if start_button_rect.collidepoint(mouse_pos):
+                    start_screen()
+                    return
+
+        pygame.display.flip()
 
 
 if __name__ == "__main__":
