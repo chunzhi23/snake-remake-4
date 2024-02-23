@@ -132,7 +132,7 @@ def game_over(window, size, score, time, length, death_message=""):
     game_over_rect.midtop = (size[0]/2, size[1]/4)
 
     #사망 사유 표시
-    r_font = pygame.font.Font('font\SUITE-Regular.ttf', 15)
+    r_font = pygame.font.Font('font/SUITE-Regular.ttf', 15)
     reason_surface = r_font.render(death_message, True, Color.red)
     reason_rect = reason_surface.get_rect()
     reason_rect.midtop = (size[0]/2, size[1]/4 + 100)
@@ -169,7 +169,7 @@ def game_over(window, size, score, time, length, death_message=""):
     
     # Button text and font settings
     button_texts = ["돌아가기", "다시 시작", "게임 종료"]
-    FONT_BUTTON = pygame.font.Font('font\SUITE-Regular.ttf', 24)
+    FONT_BUTTON = pygame.font.Font('font/SUITE-Regular.ttf', 24)
 
     # Calculate starting position for buttons
     total_button_width = button_width * 3 + button_margin * 2
@@ -472,9 +472,9 @@ def start_screen():
         main_window.fill(Color.white)
 
         LOGO = pygame.image.load("img/logo.png")
-        FONT_TITLE_PART = pygame.font.Font('font\SUITE-Regular.ttf', 14)
-        FONT_START_BUTTON = pygame.font.Font('font\SUITE-Regular.ttf', 25)
-        FONT_DESC_BUTTON = pygame.font.Font('font\SUITE-Regular.ttf', 18)
+        FONT_TITLE_PART = pygame.font.Font('font/SUITE-Regular.ttf', 14)
+        FONT_START_BUTTON = pygame.font.Font('font/SUITE-Regular.ttf', 25)
+        FONT_DESC_BUTTON = pygame.font.Font('font/SUITE-Regular.ttf', 18)
 
         ico_airplane = pygame.image.load("img/ico_airplane.png")
         resized_ico_airplane = pygame.transform.scale(ico_airplane, (200, 200))
@@ -521,8 +521,8 @@ def start_screen():
         
 
 def draw_description_screen():
-    FONT = pygame.font.Font("font\SUITE-Regular.ttf", 15)
-    TITLE_FONT = pygame.font.Font('font\SUITE-Regular.ttf', 40)
+    FONT = pygame.font.Font("font/SUITE-Regular.ttf", 15)
+    TITLE_FONT = pygame.font.Font('font/SUITE-Regular.ttf', 40)
 
     main_window.fill(Color.white)
     draw_text(main_window, "게임 설명", TITLE_FONT, Color.black, frame[0] // 2, 30)
